@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.ngController = "memberMainController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+
+
+<section class="content-header" ng-init="init()">
+    <h1>
+        首页
+        <small>美好的一天从这里开始</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        @*<li><a href="#">Examples</a></li>*@
+        @*<li class="active">Blank page</li>*@
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">微信测试</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body" style="display: block;">
+            点击测试创建菜单：<a href="javascript:;" ng-click="wxCreateMenu()">确定创建</a>
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">测试</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body" style="display: block;">
+            点击进行同步： <input style="width:100px;" date-picker  ng-model="syncDate"/><a href="javascript:;" ng-click="jobSyncApplicants()"> &nbsp; 确定</a>
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 col-sm-6 col-xs-12" dragula=""first-bag"" style="min-height:50px;">
+            <div class="box box-default" ng-repeat="item in widgets.one">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{item.title}}</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: block;">
+                    <div ng-bind-html="item.content | to_trusted"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-5 col-sm-6 col-xs-12" dragula=""first-bag""  style="min-height:50px;">
+            <div class="box box-primary"  ng-repeat="item in widgets.two">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{item.title}}</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: block;">
+                    <div ng-bind-html="item.content | to_trusted"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+        <div class="col-md-2 col-sm-12 col-xs-12"  dragula=""first-bag""  style="min-height:50px;">
+
+            <div class="box box-danger"  ng-repeat="item in widgets.three">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{item.title}}</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: block;" >
+                    <div ng-bind-html="item.content | to_trusted"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+@section scripts{
+    <script src="/lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="~/js/app/member/main.js"></script>
+}

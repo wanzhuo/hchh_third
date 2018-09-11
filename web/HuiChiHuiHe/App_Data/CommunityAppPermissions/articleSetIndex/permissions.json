@@ -1,0 +1,32 @@
+{
+  "Url": "/articleset/index",
+  "Sources": [
+    "/api/articlesetapi/getlist",
+    "/api/articlesetapi/getpagedlist",
+    "/api/articlesetapi/getsingle",
+    "/api/articlesetapi/getcontent",
+    "/api/articlesetapi/setcontent",
+    "/api/articlesetapi/add",
+    "/api/articlesetapi/movetocategory",
+    "/api/articlesetapi/update",
+    "/api/articlesetapi/setisdelete",
+    "/api/articlesetapi/getarticlecolumns",
+    "/api/articlesetapi/getarticleextends",
+    "/api/articlecategorysetapi/getlist",
+    "/api/articlecategorysetapi/gettree",
+    "/api/articlecategorysetapi/getpagedlist",
+    "/api/articlecategorysetapi/getsingle",
+    "/api/articlecategorysetapi/add",
+    "/api/articlecategorysetapi/update",
+    "/api/articlecategorysetapi/setisdelete",
+    "/api/articlecolumnsetapi/getlist",
+    "/api/articlecolumnsetapi/add",
+    "/api/articlecolumnsetapi/update",
+    "/api/articlecolumnsetapi/setisdelete",
+    "/api/articlescheduledtasksetapi/getlist",
+    "/api/articlescheduledtasksetapi/add",
+    "/api/articlescheduledtasksetapi/update",
+    "/api/articlescheduledtasksetapi/setisdelete",
+    "/api/spiderapi/getcontent"
+  ]
+}

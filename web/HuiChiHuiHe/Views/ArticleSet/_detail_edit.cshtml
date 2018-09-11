@@ -1,0 +1,186 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> 《{{current.title}}》 详细</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="updateError!=''">
+        <p>
+            <b>更新失败：</b>{{updateError}}
+        </p>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#basic" data-toggle="tab">基本</a></li>
+            @*<li><a href="#content" data-toggle="tab">内容</a></li>*@
+            <li><a href="#image" data-toggle="tab">图片</a></li>
+            <li><a href="#other" data-toggle="tab">参数</a></li>
+            <li><a href="#cssjs" data-toggle="tab">CSS/JS</a></li>
+            <li><a href="#extends" data-toggle="tab">扩展</a></li>
+            <li><a href="#refs" data-toggle="tab">参考</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="basic">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input class="form-control" ng-model="current.title" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>副标题</label>
+                    <input class="form-control" ng-model="current.subTitle" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>摘要</label>
+                    <input class="form-control" ng-model="current.summary" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>标识</label>
+                    <input class="form-control" ng-model="current.flag" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>跳转链接</label>
+                    <input class="form-control" ng-model="current.skipUrl" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>是否推荐</label>
+                    <div class="form-control">
+                        <input ng-model="current.isRecommend" type="checkbox" />推荐
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>扩展名 <a href="javascript:;" class="btn btn-link" ng-click="current.ext='.md'">[.md]</a> <a href="javascript:;" class="btn btn-link" ng-click="current.ext=''">清空</a></label>
+                    <input class="form-control" ng-model="current.ext" type="text" />
+                </div>
+            </div>
+            @*<div class="tab-pane" id="content">
+                    <div class="form-group">
+                        <textarea content="current.content" style="height:250px;" ueditor editor="editEditor" server-url="/articleSet/ueditorUpload?communityFlag=@Model.CommunityFlag&appFlag=@Model.AppFlag"></textarea>
+                    </div>
+                    <div class="clear"></div>
+                </div>*@
+            <div class="tab-pane" id="image">
+                <div class="form-group">
+                    <label>图片</label>
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" ng-model="current.ico" type="text" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-info btn-flat" onclick="javascript:document.getElementById('file').click();">上传</button>
+                            <input type="file" style="display:none"
+                                   id="file" name='image' onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this).scope().current)" />
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>预览</label>
+                    <img ng-src="{{current.ico}}" />
+                </div>
+
+            </div>
+            <div class="tab-pane" id="other">
+                
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" ng-model="current.status" ng-options="status.value as status.name for status in articleStatusList"></select>
+                </div>
+                <div class="form-group">
+                    <label>排序权重</label>
+                    <input class="form-control" ng-model="current.orderWeight" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>点击数</label>
+                    <input class="form-control" ng-model="current.hits" type="text" />
+                </div>
+                <div class="form-group" ng-repeat="col in current.columns">
+                    <label>{{col.columnName}}</label>
+                    <input class="form-control" ng-model="col.value" type="text" ng-if="col.columnType==0" />
+                    <div class="input-group input-group-sm" ng-if="col.columnType==100">
+                        <input class="form-control" ng-model="col.value" type="text" />
+                        <span class="input-group-btn">
+                            <button type="file" class="btn btn-info btn-flat" ngf-select="upload($file,col,'value')" accept="image/*" >上传</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>tags</label>
+                    <input class="form-control" ng-model="current.tags" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>keywords</label>
+                    <input class="form-control" ng-model="current.keywords" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>description</label>
+                    <input class="form-control" ng-model="current.description" type="text" />
+                </div>
+            </div>
+
+            <div class="tab-pane" id="cssjs">
+                <div class="form-group">
+                    <label>Class扩展</label>
+                    <input class="form-control" ng-model="current.cssClass" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Style扩展</label>
+                    <textarea class="form-control" ng-model="current.cssStyle"></textarea>
+                </div>
+                <div class="clear"></div>
+                <div class="form-group">
+                    <label>Js扩展</label>
+                    <textarea class="form-control" ng-model="current.js"></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="tab-pane" id="extends">
+                <h3>
+                    <button type="button" class="btn btn-box-tool" ng-click="current.extends.push({});"><i class="fa fa-plus"></i> 添加</button>
+                </h3>
+                <table class="table colResizable">
+                    <thead>
+                        <tr>
+                            <th style="width:70px;text-align:center;">序号</th>
+                            <th style="width:150px;">组件名称</th>
+                            <th>参数字符串</th>
+                            <th style="width:80px;">排序</th>
+                            <th style="width:150px;">说明</th>
+                            <th style="width:70px;text-align:center;">删除</th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat="item in current.extends">
+                        <td style="text-align:center;">{{($index+1)}}</td>
+                        <td><input class="form-control" ng-model="item.componentName" /></td>
+                        <td><input class="form-control" ng-model="item.paramsString" /></td>
+                        <td><input class="form-control" ng-model="item.orderWeight" /></td>
+                        <td><input class="form-control" ng-model="item.detail" /></td>
+                        <td style="text-align:center;"><a href="javascript:;" data-fn-delete="removeArrayItem(item,current.extends)" delete-confirm="确定移除?"><i class="fa fa-remove"></i></a></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="refs">
+                <p>
+                    <a target="_blank" href="/article/{{communityFlag}}/{{appFlag}}/{{current.flag}}.html">/article/{{communityFlag}}/{{appFlag}}/{{current.flag}}.html</a>
+                </p>
+                <p>
+                    <a target="_blank" href="/subject/{{communityFlag}}/{{appFlag}}/{{currentCategory.flag}}/{{current.flag}}.html">/subject/{{communityFlag}}/{{appFlag}}/{{currentCategory.flag}}/{{current.flag}}.html</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+<div class="box-footer">
+    <button class="btn btn-primary" ng-click="update()">保存</button>
+</div>
+<!-- /.box-body -->

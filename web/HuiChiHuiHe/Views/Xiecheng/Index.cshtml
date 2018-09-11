@@ -1,0 +1,1307 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "xiechengIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            求职列表
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            @*<li><a href="#">Examples</a></li>*@
+            <li class="active">求职列表</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <div>
+                    <select select2 class="form-control input-sm" placeholder="请先选择职位" ng-model="searchModel.jobId" ng-change="load()" style="display: inline-block;width: 350px;">
+                        <option value="{{ item.jobId }}" ng-repeat="item in jobRecList">{{ item.jobTitle }}({{ item.jobCode }})</option>
+                    </select>
+                    <!--<button class="btn" ng-click="goSetPending()">待定</button>-->
+                    <button class="btn btn-sm" ng-click="goFail()">淘汰</button>
+                    <button class="btn btn-sm" ng-click="goPass()">下一阶段</button>
+                    <button class="btn btn-sm" ng-click="goSetPhase()" ng-if="searchModel.jobId">批量转移</button>
+                    <button class="btn btn-sm" ng-click="printMore()" ng-if="searchModel.jobId">批量打印</button>
+                    <button class="btn btn-sm" ng-click="sendMesByInput()" ng-if="searchModel.jobId">发送消息</button>
+                    <button class="btn btn-sm" ng-click="sendMailByInput()" ng-if="searchModel.jobId">转发资料</button>
+                </div>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-warning" ng-click="exportModelOpen()">导出</button>
+                </div>
+            </div>
+            <div class="box-body table-responsive no-padding">
+                <table class="table colResizable table-hover" style="width:98%;">
+                    <thead>
+                        <tr>
+                            <th width='70' style="text-align:center"><input type="checkbox" ng-checked="selectAll" name="" ng-click="selectValAll()"></th>
+                            <th style="text-align:center">姓名</th>
+                            <th style="text-align:center">资料完整度</th>
+                            <th style="text-align:center">岗位</th>
+                            <th style="text-align:center">阶段</th>
+                            <th style="text-align:center">状态</th>
+                            <th style="text-align:center">招聘状态</th>
+                            <th style="text-align:center">工具栏</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align:center;">---</td>
+                        <td><input type="text" class="form-control input-sm" ng-model="searchModel.personName" ng-change="load()" ng-model-options="{debounce:1000}" esc-key="resetFilter()" /></td>
+                        <td style="text-align:center;">---</td>
+                        <td style="text-align:center;">--</td>
+                        <td style="text-align:center;">
+                            <select class="form-control input-sm" ng-model="searchModel.phaseName" ng-options="item.value as item.name for item in searchPhaseList" ng-change="load()"></select>
+                        </td>
+                        <td style="text-align:center;">
+                            <select class="form-control input-sm" ng-model="searchModel.statusName" ng-options="item.value as item.name  for item in searchStatusList" ng-change="load()"></select>
+                        </td>
+                        <td style="text-align:center;">
+                            <select class="form-control input-sm" ng-model="searchModel.jobRecruitmentStatus" ng-options="item.value as item.name  for item in searchJobStatusList" ng-change="load()"></select>
+                        </td>
+                        <td style="text-align:center;">---</td>
+                    </tr>
+                    <tr ng-repeat="item in items">
+                        <td style="text-align:center;padding-top:0;padding-bottom:0;"><label for="{{item.id}}" style="display: block;padding-top: 8px;margin-bottom: 0;padding-bottom: 8px;cursor: pointer;"><input type="checkbox" id="{{item.id}}" name="idss" ng-checked="isSelected(item.id)" ng-click="selectVal($event,item.id,$index)"></label></td>
+                        <td style="text-align:center;cursor:pointer" ng-click="edit($index)">{{item.personName}}</td>
+                        <td style="text-align:center;">{{item.completeness}}%</td>
+                        <td style="text-align:center;">{{item.jobName}}</td>
+                        <td style="text-align:center;">{{item.phaseName}}</td>
+                        <td style="text-align:center;">{{item.statusName}}</td>
+                        <td style="text-align:center">{{item.jobRecruitmentStatus}}</td>
+                        <td style="text-align:center"><a href="javascript:;" ng-click="startChat(isBindWX[item.applicantId],item.personName)" ng-show="isBindWX[item.applicantId]"><i class="fa fa fa-comments" style="font-size:18px;"></i></a> <!--<a href="javascript:;" ng-click="myPrint(item.applicantId)"><i class="fa fa-print" style="font-size:18px;"></i></a> --> <a href="javascript:;" ng-click="goSetPhase(item.id,$index)"><i class="fa fa-random" style="font-size:18px;"></i></a> <a href="javascript:;" ng-click="sendMesByInput(item.id,$index)" ng-show="isBindWX[item.applicantId]"><i class="fa fa-bell" style="font-size:18px;"></i></a></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <ul  ng-show="totalCount>pageSize" uib-pagination total-items="totalCount" items-per-page="pageSize" ng-model="pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="load()"></ul>
+            </div>
+        </div>
+        <!-- /.box -->
+    </section>
+    <!-- /.content -->
+
+<!-- 模态框（Modal） -->
+<div class="modal fade bs-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999;">
+  <div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					消息提示
+				</h4>
+			</div>
+			<div class="modal-body">
+				{{addError}}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<!-- 导出 模态框（Modal） -->
+<div class="modal fade bs-example-modal-sm" id="exportModal" tabindex="-1" role="dialog" style="z-index: 9999;">
+  <div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">
+					批量导出
+				</h4>
+			</div>
+			<div class="modal-body">
+				<select class="form-control" ng-model="export.type" ng-change="exportSource()" style="width:213px;margin-left:10px;">
+                    <option value="all">导出全部</option>
+                    <option value="page">导出本页</option>
+                </select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" add-bom="true" csv-header="['编号', '姓名', '岗位', '阶段', '状态']" ng-csv="export.data" filename="export.csv">确定导出</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">转移到</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-inline">
+          <div class="form-group" style="margin-bottom:10px;display:block;">
+            <label for="Interviewer">阶段</label>
+            <!-- <select class="form-control" ng-model="newModel.phaseName" ng-change="statusChangeByProcess()" style="width:213px;margin-left:10px;">
+                <option value="{{item}}" ng-repeat="item in processPhasesSet">{{item}}</option>
+            </select> -->
+            <span ng-repeat="item in processPhasesSet" class="processBtn processArraw" ng-class="{'active':item==newModel.phaseName}" ng-click="statusChangeByProcess(item)">{{item}}</span>
+          </div>
+          <div class="form-group" style="margin-bottom:10px;margin-top:20px;display:block;">
+            <label for="Interviewer">状态</label>
+            <!-- <select class="form-control" ng-model="newModel.statusName" style="width:213px;margin-left:10px;">
+                <option value="{{item}}" ng-repeat="item in statusPhasesSet">{{item}}</option>
+            </select> -->
+            <span ng-repeat="item in statusPhasesSet" class="processBtn" ng-class="{'active':item==newModel.statusName}" ng-click="statusSelect(item)">{{item}}</span>
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-block btn-primary" ng-click="goSetPhaseOK()">提交</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- 手动发送模板消息 -->
+<div class="modal fade" id="mesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">发送模板消息</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-inline">
+          <div class="form-group" style="margin-bottom:10px">
+            <label for="Interviewer">模板</label>
+            <select class="form-control" ng-model="mesByInput.selectIndex" style="width:213px;margin-left:10px;">
+                <option value="-1">-- 请选择 --</option>
+                <option value="{{item.index}}" ng-repeat="item in mesByInput.template">{{item.text}}</option>
+            </select>
+          </div>
+          <div ng-if="mesByInput.selectIndex>-1">
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">导语(first)</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].first" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt1}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword1" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt2}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword2" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt3}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword3" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">备注(remark)</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].remark" type="text" style="width:100%;" />
+            </div>
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-block btn-primary" ng-click="sendMesByInputSubmit()" ng-if="mesByInput.selectIndex>-1">发送消息</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- 手动发送模板消息(在对话框调起发送) -->
+<div class="modal fade" id="mesModalOnChat" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">发送模板消息</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-inline">
+          <div class="form-group" style="margin-bottom:10px">
+            <label for="Interviewer">模板</label>
+            <select class="form-control" ng-model="mesByInput.selectIndex" style="width:213px;margin-left:10px;">
+                <option value="-1">-- 请选择 --</option>
+                <option value="{{item.index}}" ng-repeat="item in mesByInput.template">{{item.text}}</option>
+            </select>
+          </div>
+          <div ng-if="mesByInput.selectIndex>-1">
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">导语(first)</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].first" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt1}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword1" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt2}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword2" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px" ng-if="mesByInput.data[mesByInput.selectIndex].txt3">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt3}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword3" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px" ng-if="mesByInput.data[mesByInput.selectIndex].txt4">
+                <label for="Interviewer">{{mesByInput.data[mesByInput.selectIndex].txt4}}</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].keyword4" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">备注(remark)</label>
+                <input class="form-control" ng-model="mesByInput.data[mesByInput.selectIndex].remark" type="text" style="width:100%;" />
+            </div>
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-block btn-primary" ng-click="sendMesByInputSubmitOnChat()">发送消息</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- 手动发送邮件 -->
+<div class="modal fade" id="mailModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">转发资料</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-inline" name="myForm">
+          <div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">收件人Email</label>
+                <input class="form-control" placeholder="请填写Email" name="myAddress" ng-model="sendMailData.to" type="email" autocomplete="true" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">收件人称呼</label>
+                <input class="form-control" ng-model="sendMailData.name" type="text" style="width:100%;" />
+            </div>
+            <div class="" style="margin-bottom:10px">
+                <label for="Interviewer">邮件标题</label>
+                <input class="form-control" ng-model="sendMailData.title" type="text" style="width:100%;" />
+            </div>
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-block btn-primary" ng-disabled="myForm.myAddress.$error.email || !sendMailData.to || sendMailData.isSubmit" ng-click="sendMailByInputSubmit()">发送邮件</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--半透明底-->
+<div ng-show="viewName=='edit'" ng-click="viewName = 'index'" class="mark"></div>
+
+<div ng-show="loadingTxt!=''" class="mark" style="color:#fff;text-align:center;z-index:99999;"><div style="margin-top:25%;font-size:18px;" ng-bind="loadingTxt"></div></div>
+
+@{await Html.RenderPartialAsync("_global_chat");}
+</section>
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-plus" ng-dblclick="viewName = 'index'"></i> 添加</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="addError!=''">
+                <p>
+                    <b>添加失败：</b>{{addError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>邮箱地址（登陆名）</label>
+                <input class="form-control" ng-model="newModel.email" type="email" />
+            </div>
+            <div class="form-group">
+                <label>真实姓名</label>
+                <input class="form-control" ng-model="newModel.truename" type="text" />
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input class="form-control" ng-model="newModel.password" type="text" />
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="add()">确定添加</button>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'" style="padding-top:41px;">
+         <div class="box-header box-header-me with-border" style="position: fixed;top: 0;background-color: #fff;width: 100%;">
+            <div class="sidebar-btn">
+                <a href='javascript:;' ng-click="goFail(true)">淘汰</a>
+                <a href='javascript:;' ng-click="goPass(true)">下一阶段</a>
+                <a href='javascript:;' ng-click="goSetPhase(newModel.applyId,tempIndex,true)">阶段转移</a>
+                <div style="margin-top:10px;">
+                <a href='javascript:;' ng-click="goPrev()">
+                    <span ng-show="tempIndex>0">上一份简历</span>
+                    <span ng-show="tempIndex==0" style="color:#f00;">本页已到顶</span>
+                </a>
+                <a href='javascript:;' ng-click="goNext()">
+                    <span ng-show="tempIndex<items.length-1">下一份简历</span>
+                    <span ng-show="tempIndex>=items.length-1" style="color:#f00;">本页已到底</span>
+                </a>
+                </div>
+            </div>
+            <h3 class="box-title"><i class="fa fa-user" ng-dblclick="viewName = 'index'"></i> {{regForms.profiles|getProperty:"Name"}} <span class="badge">{{editItem.jobName}}</span> |  当前状态：{{editItem.phaseName}}-{{editItem.statusName}}  <!-- <a href="javascript:;" ng-click="goSetPhase(newModel.applyId,tempIndex)"><i class="fa fa-random" style="font-size:16px;"></i></a>--></h3> 
+
+            <div class="box-tools pull-left">
+                 <a href="javascript:;" ng-click="printJs('#print')"><i class="fa fa-print" style="font-size:16px;"></i></a>
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+
+<table width="100%">
+    <tr>
+    <td width="90" style="border-right:1px solid #ccc;">
+        <div style="position:fixed;top:41px;">
+            <ul class="ul-list">
+                <li ng-class="{true: 'active'}[documentName==0]" ng-click="getApplyDocument(0)">面试登记表</li>
+                <li ng-repeat="item in applyDocs" ng-click="getApplyDocument(item)" ng-class="{true: 'active'}[documentName==item]">简历{{$index+1}}</li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <div style="padding:10px;">
+            <div class="label-div">
+                标签：<span ng-repeat="item in myTags" ng-click="removeTags(item,$index)">{{item}}</span><a href="javascript:;" ng-click="showTags()"><i class="fa fa-plus"></i> 添加</a>
+            </div>
+            <div style="background-color:#f3f3f3;margin-top:10px;padding:10px;" ng-show="showTagsFlag">
+                <span style="float:right;cursor:pointer;" ng-click="closeTags()"><i class="fa fa-times"></i></span>
+                <dl class="tagsdl">
+                    <dt>个人标签 <input type="text" ng-model="tags.input" style="width: 80px;text-align: center;font-weight: normal;"> <button style="font-weight: normal;" ng-click="addPersonTag()">添加</button></dt>
+                    <dd ng-repeat="item in tags.rs" ng-click="addTags(item)">{{item.name}}<span class="deltags" ng-click="delPersonTag(item.id,$event)">X</span></dd>
+                    <dt>公共标签</dt>
+                    <dd ng-repeat="item in tagsRs" ng-click="addTags(item)">{{item.name}}</dd>
+                </dl>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body"  id="print">
+<div id="sourceDoc">
+
+        <div class="nextpage">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:
+ collapse;table-layout:fixed;">
+ <colgroup><col class="xl66" width="59" style="mso-width-source:userset;mso-width-alt:2157;
+ width:44pt">
+ <col class="xl66" width="16" span="2" style="mso-width-source:userset;mso-width-alt:
+ 585;width:12pt">
+ <col class="xl66" width="128" style="mso-width-source:userset;mso-width-alt:4681;
+ width:96pt">
+ <col class="xl66" width="73" style="mso-width-source:userset;mso-width-alt:2669;
+ width:55pt">
+ <col class="xl66" width="103" style="mso-width-source:userset;mso-width-alt:3766;
+ width:77pt">
+ <col class="xl66" width="110" style="mso-width-source:userset;mso-width-alt:4022;
+ width:83pt">
+ <col class="xl66" width="104" style="mso-width-source:userset;mso-width-alt:3803;
+ width:78pt">
+ <col class="xl66" width="38" style="mso-width-source:userset;mso-width-alt:1389;
+ width:29pt">
+ <col class="xl66" width="28" style="mso-width-source:userset;mso-width-alt:1024;
+ width:21pt">
+ <col class="xl66" width="24" style="mso-width-source:userset;mso-width-alt:877;
+ width:18pt">
+ <col class="xl66" width="36" style="mso-width-source:userset;mso-width-alt:1316;
+ width:27pt">
+ </colgroup><tbody>
+     <tr class=xl78 height=54 style='mso-height-source:userset;height:40.5pt'>
+  <td colspan=12 height=54 width=735 style='height:40.5pt;width:552pt'
+  align=left valign=top><span style='mso-ignore:vglayout;
+  position:absolute;z-index:1;margin-left:34px;margin-top:0px;width:138px;
+  height:65px'><img src="~/images/image002.png"></span><span
+  style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td colspan=12 height=54 class=xl132 width=735 style='height:40.5pt;
+    width:552pt'>面试登记表</td>
+   </tr>
+  </table>
+  </span></td>
+ </tr>
+ <tr height=17 style='mso-height-source:userset;height:12.75pt'>
+  <td height=17 class=xl69 style='height:12.75pt'></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+ </tr>
+ <tr height=49 style='mso-height-source:userset;height:36.75pt'>
+  <td colspan=12 height=49 class=xl134 width=735 style='border-right:1pt solid black;
+  height:36.75pt;width:552pt'>欢迎您到携程参加面谈！为了保证面谈有效进行，请准确填写下表。其中打“<font
+  class="font7">*</font><font class="font9">”号的为必填项，其余为建议填写项。填写完成请及时告知招聘接待人员以便及时安排面谈。</font><font
+  class="font7"> </font><font class="font9">谢谢！</font></td>
+ </tr>
+ <tr height=21 style='mso-height-source:userset;height:15.75pt'>
+  <td colspan=12 height=21 class=xl137 style='border-right:1pt solid black;
+  height:15.75pt'>携程人力资源部</td>
+ </tr>
+
+<tr class="xl70" height="28" style="mso-height-source:userset;height:21.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:21.0pt">意向职位</td>
+  <td colspan="3" class="xl123" style="border-left:none">{{newModel.jobName}}</td>
+  <td rowspan="2" class="xl121" style="border-bottom:1pt solid black;border-top:
+  none">期望待遇</td>
+  <td colspan="5" class="xl123" width="230" style="border-right:1pt solid black;
+  border-left:none;width:173pt">基本月薪 {{regForms.profiles|getProperty:"Treatment"}}元（税前）</td>
+ </tr>
+ <tr class="xl70" height="28" style="mso-height-source:userset;height:21.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:21.0pt">意向部门</td>
+  <td colspan="3" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"IntentionDepartment"}}</td>
+  <td colspan="5" class="xl123" width="230" style="border-right:1pt solid black;
+  border-left:none;width:173pt">年收入<span style="mso-spacerun:yes">
+  </span>{{regForms.profiles|getProperty:"TreatmentYear"}}元（税前）</td>
+ </tr>
+
+ <tr class="xl71" height="28" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:22.0pt">工作状况</td>
+  <td colspan="3" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"WordCondition"}}</td>
+  <td class="xl83" style="border-top:none;border-left:none">可到职日期</td>
+  <td colspan="5" class="xl145" style="border-left:none">{{regForms.profiles|getProperty:"EOD"|timeFormat}}</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">中文姓名</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Name"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">性别</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"gender"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">出生年月</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Birthday"|timeFormat}}</td>
+  <td colspan="4" rowspan="4" class="xl140" style="border-right:1pt solid black"><img ng-src="{{avatar}}" style="width:112px;height:129px"></td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">身高</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Height"}}cm</td>
+  <td class="xl67" style="border-top:none;border-left:none">体重</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Weight"}}kg</td>
+  <td class="xl67" style="border-top:none;border-left:none">健康状况</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Healthy"}}</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">户籍地址</td>
+  <td colspan="2" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"DomicilePlace"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">身份证号码</td>
+  <td colspan="2" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"CertificateNumber"}}</td>
+ </tr>
+ <tr class="xl65" height="34" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="34" class="xl67" style="height:22.0pt">现居住地</td>
+  <td colspan="3" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"ResidenceState"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">籍贯/出生地</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"NativePlace"}}</td>
+ </tr>
+ <tr class="xl65" height="32" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="32" class="xl67" style="height:22.0pt">手机</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Mobile"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">联系电话</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"telephone"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">个人邮箱</td>
+  <td colspan="5" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"email"}}</td>
+ </tr>
+ <tr class="xl65" height="25" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="25" class="xl67" style="height:22.0pt">婚姻状况</td>
+  <td colspan="9" class="xl107" style="border-right:1pt solid black">&nbsp;&nbsp;&nbsp;&nbsp;{{regForms.profiles|getProperty:"WedState"}}</td>
+ </tr>
+ <tr class="xl65" height="36" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{emptyEduLen+2}}"  class="xl160" style="border-top:none">教育培训经历</td>
+  <td colspan="3" class="xl68" style="border-right:1pt solid black;border-left:
+  none">起止年月</td>
+  <td colspan="2" class="xl68" style="border-right:1pt solid black;border-left:none">毕业学校</td>
+  <td class="xl67" style="border-top:none;border-left:none">专业</td>
+  <td class="xl65">学历</td>
+  <td colspan="3" class="xl67">学历类型</td>
+  <td class="xl75" width="36" style="border-top:none;border-left:none;width:27pt">是否毕业</td>
+ </tr>
+
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.educationExperiences">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none">{{item.startTime|timeFormat}}-{{item.endTime|timeFormat}}</td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none">{{item.schoolName}}</td>
+      <td class="xl99" style="border-top:none;border-left:none">{{item.majorName}}</td>
+      <td class="xl99" style="border-left:none">{{item.educationLevelName}}</td>
+      <td colspan="3" class="xl99" width="90" style="border-right:1pt solid black; border-left:none;width:68pt">{{item.formsOfLearningName}}</td>
+      <td class="xl99" width="36" style="border-top:none;border-left:none;width:27pt">{{item.isFinished|boolTxt}}</td>
+     </tr>
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in emptyEdu">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none"></td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none"></td>
+      <td class="xl99" style="border-top:none;border-left:none"></td>
+      <td class="xl99" style="border-left:none"></td>
+      <td colspan="3" class="xl99" width="90" style="border-right:1pt solid black; border-left:none;width:68pt"></td>
+      <td class="xl99" width="36" style="border-top:none;border-left:none;width:27pt"></td>
+     </tr>
+    <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none"><b>外语水平</b></td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none"><b>计算机水平</b></td>
+      <td class="xl99" colspan="6"  style="border-top:none;border-left:none;"><b>其他技能或培训经历</b></td>
+     </tr>
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none">{{regForms.profiles|getProperty:"ForeignLang"}}</td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none">{{regForms.profiles|getProperty:"ComputerSkill"}}</td>
+      <td class="xl99" colspan="6"  style="border-top:none;border-left:none;">{{regForms.profiles|getProperty:"OtherSkill"}}</td>
+     </tr>
+ <tr class="xl65" height="28" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="4" height="222" class="xl160" style="height:166.5pt;border-top:none">最近工作说明</td>
+  <td colspan="3" class="xl67" style="border-left:none">起止年月</td>
+  <td colspan="2" class="xl67" style="border-left:none">工作单位</td>
+  <td class="xl67" style="border-top:none;border-left:none">任职岗位</td>
+  <td class="xl67" style="border-left:none">所在城市</td>
+  <td colspan="4" class="xl67" style="border-left:none">岗位月薪</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none">{{regForms.workExperiences[0].startTime|timeFormat}}-{{regForms.workExperiences[0].endTime|timeFormat}}</td>
+  <td colspan="2" class="xl99" style="border-left:none">{{regForms.workExperiences[0].companyName}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{regForms.workExperiences[0].jobTitle}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{regForms.workExperiences[0].cityName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{regForms.workExperiences[0].salaryRange}}</td>
+ </tr>
+ <tr class="xl65" height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="5" height="30" class="xl68" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">工作内容</td>
+  <td colspan="2" class="xl68" style="border-right:1pt solid black;border-left:
+  none">主要业绩描述</td>
+  <td colspan="4" class="xl67" style="border-left:none">离职主要原因</td>
+ </tr>
+ <tr class="xl65" height="230" style="mso-height-source:userset;height:180pt">
+  <td colspan="5" height="230" class="xl163" style="border-right:1pt solid black;
+  height:210pt;border-left:none;border-bottom:1pt solid black">{{regForms.workExperiences[0].jobDuty}}</td>
+  <td colspan="2" class="xl163" style="border-right:1pt solid black;border-bottom:
+  1pt solid black">{{regForms.workExperiences[0].mainAchievement}}</td>
+  <td colspan="4" class="xl163" style="border-right:1pt solid black;border-bottom:1pt solid black">{{regForms.workExperiences[0].reasonOfLeaving}}</td>
+  </tr>
+
+  <tr height="12"></tr>
+
+</tbody></table>
+</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="735" style="border-collapse:
+ collapse;table-layout:fixed;width:100%;">
+ <colgroup><col class="xl66" width="59" style="mso-width-source:userset;mso-width-alt:2157;
+ width:44pt">
+ <col class="xl66" width="16" span="2" style="mso-width-source:userset;mso-width-alt:
+ 585;width:12pt">
+ <col class="xl66" width="128" style="mso-width-source:userset;mso-width-alt:4681;
+ width:96pt">
+ <col class="xl66" width="73" style="mso-width-source:userset;mso-width-alt:2669;
+ width:55pt">
+ <col class="xl66" width="103" style="mso-width-source:userset;mso-width-alt:3766;
+ width:77pt">
+ <col class="xl66" width="110" style="mso-width-source:userset;mso-width-alt:4022;
+ width:83pt">
+ <col class="xl66" width="104" style="mso-width-source:userset;mso-width-alt:3803;
+ width:78pt">
+ <col class="xl66" width="38" style="mso-width-source:userset;mso-width-alt:1389;
+ width:29pt">
+ <col class="xl66" width="28" style="mso-width-source:userset;mso-width-alt:1024;
+ width:21pt">
+ <col class="xl66" width="24" style="mso-width-source:userset;mso-width-alt:877;
+ width:18pt">
+ <col class="xl66" width="36" style="mso-width-source:userset;mso-width-alt:1316;
+ width:27pt">
+
+ </colgroup><tbody><tr class="xl65" height="31" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{workLen}}" class="xl160">其他工作经历</td>
+  <td colspan="3" class="xl67" style="border-left:none">起止年月</td>
+  <td colspan="2" class="xl67" style="border-left:none">工作单位</td>
+  <td class="xl67" style="border-left:none">岗位</td>
+  <td class="xl67" style="border-left:none">所在城市</td>
+  <td colspan="4" class="xl67" style="border-left:none">岗位月薪</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.workExperiencesOther">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none">{{item.startTime|timeFormat}}-{{item.endTime|timeFormat}}</td>
+  <td colspan="2" class="xl99" style="border-left:none">{{item.companyName}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.jobTitle}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.cityName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{item.salaryRange}}</td>
+ </tr>
+  <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in emptyWork">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none"></td>
+  <td colspan="2" class="xl99" style="border-left:none"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td colspan="4" class="xl99" style="border-left:none"></td>
+ </tr>
+    
+ <tr class="xl65" height="27" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{familyLen}}"  class="xl160" width="59" style="
+  width:44pt">主要家庭成员</td>
+  <td colspan="3" class="xl67" style="border-left:none">姓名</td>
+  <td class="xl67" style="border-left:none">关系</td>
+  <td colspan="3" class="xl67" style="border-left:none">工作单位(如无工作单位，填写家庭地址)</td>
+  <td colspan="4" class="xl67" style="border-left:none">所在城市</td>
+ </tr>
+<tr class="xl65" height="35" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.familyList">
+  <td colspan="3" height="35" class="xl99" width="160" style="height:22.0pt; border-left:none;width:120pt">{{item.name}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.relation}}</td>
+  <td colspan="3" class="xl99" style="border-left:none">{{item.companyName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{item.workPlace}}</td>
+</tr>
+<tr class="xl65" height="35" style="mso-height-source:userset;height:22.0pt" ng-repeat="x in emptyFamily">
+  <td colspan="3" height="35" class="xl99" width="160" style="height:22.0pt; border-left:none;width:120pt"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td colspan="3" class="xl99" style="border-left:none"></td>
+  <td colspan="4" class="xl99" style="border-left:none"></td>
+</tr>
+
+
+     <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="25" height="657" class="xl102" width="59" style="height:492.75pt;
+  border-top:none;width:44pt">其他个人信息及求职意愿</td>
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+    height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+        您是否在携程公司工作过？<span style="mso-spacerun:yes">&nbsp;&nbsp;</span></span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl157" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question1"}} <span>{{regForms.otherInfoForCustom|getProperty:"question1des"}}</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾经或者正在应聘携程其他区域或分公司的岗位？<span style="mso-spacerun:yes">&nbsp;&nbsp;</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl157" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question2"}} <span>{{regForms.otherInfoForCustom|getProperty:"question2des"}}</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否有亲属在携程公司或与携程有直接竞争关系的公司工作？ <span style="mso-spacerun:yes">&nbsp;&nbsp;</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl109" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question3"}} <span>{{regForms.otherInfoForCustom|getProperty:"question3des"}}</span></td>
+ </tr>
+ <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="29" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾因犯罪行为而被刑事处罚过？<span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;
+  </span>●{{regForms.otherInfoForCustom|getProperty:"question4"}}</td>
+ </tr>
+ <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="29" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾因违纪或表现不佳而被单位解雇过？<span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;
+  </span>●{{regForms.otherInfoForCustom|getProperty:"question5"}}</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您可以接受以下哪些班制的工作安排？</td>
+ </tr>
+ <tr height="20" style="mso-height-source:userset;height:15.0pt">
+  <td colspan="11" height="20" class="xl107" style="border-right:1pt solid black;
+  height:15.0pt;border-left:none">
+            
+      <span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>{{regForms.otherInfoForCustom|getProperty:"question6"}}             </td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>根据您择业的关注程度，请为以下项目排序：</td>
+ </tr>
+ <tr height="25" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="25" class="xl148" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none;text-align: left;">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question7"}}</td>
+ </tr>
+ <tr height="23" style="mso-height-source:userset;height:17.25pt">
+  <td colspan="11" height="23" class="xl104" style="border-right:1pt solid black;
+  height:17.25pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆
+  请简要说明您对加班的看法：</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl115" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question8"}}</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆
+  请简要说明您对出差（非长期外派）的看法：</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl115" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question9"}}</td>
+ </tr>
+ <tr height="23" style="mso-height-source:userset;height:17.25pt">
+  <td colspan="11" height="23" class="xl107" style="border-right:1pt solid black;
+  height:17.25pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请分别用三组词语描述您的个人能力匹配本职位的优势和不足：</b></td>
+ </tr>
+ <tr height="53" style="mso-height-source:userset;height:39.75pt">
+  <td colspan="11" height="53" class="xl107" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">
+      <div>&nbsp;&nbsp;&nbsp;优势：{{regForms.otherInfoForCustom|getProperty:"question10"}}；{{regForms.otherInfoForCustom|getProperty:"question101"}}；{{regForms.otherInfoForCustom|getProperty:"question102"}}</div>
+      <div>&nbsp;&nbsp;&nbsp;不足：{{regForms.otherInfoForCustom|getProperty:"question103"}}；{{regForms.otherInfoForCustom|getProperty:"question104"}}；{{regForms.otherInfoForCustom|getProperty:"question105"}}</div>
+         </td>
+ </tr>
+
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;border-top:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请说明您的特长或业余爱好：</b></td>
+ </tr>
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">
+  &nbsp;&nbsp;&nbsp;特长：{{regForms.otherInfoForCustom|getProperty:"question11"}}；业余爱好：{{regForms.otherInfoForCustom|getProperty:"question111"}}</td>
+ </tr>
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;border-top:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请简要说明您应聘本职位的三点理由：</b></td>
+ </tr>
+ <tr height="75" style="mso-height-source:userset;height:56.25pt">
+  <td colspan="11" height="75" class="xl115" style="border-right:1pt solid black;
+  height:56.25pt;border-left:none;border-bottom:none">
+  <div>&nbsp;&nbsp;&nbsp;1：{{regForms.otherInfoForCustom|getProperty:"question12"}}</div>
+  <div>&nbsp;&nbsp;&nbsp;2：{{regForms.otherInfoForCustom|getProperty:"question121"}}</div>
+  <div>&nbsp;&nbsp;&nbsp;3：{{regForms.otherInfoForCustom|getProperty:"question122"}}</div>
+             </td>
+ </tr>
+ <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" height="0"></td>
+ </tr>
+ <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" height="0"></td>
+ </tr>
+
+  <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" class="xl107" style="border-right:1pt solid black;border-left:none"></td>
+ </tr>
+
+ <tr height="26" style="mso-height-source:userset;height:19.5pt">
+  <td colspan="12" height="26" class="xl161" width="735" style="height:19.5pt;
+  width:552pt">求职者声明：</td>
+ </tr>
+ <tr height="26" style="mso-height-source:userset;height:19.5pt">
+  <td colspan="12" height="26" class="xl94" width="735" style="height:19.5pt;
+  width:552pt"></td>
+ </tr>
+ <tr height="44" style="mso-height-source:userset;height:33.0pt">
+  <td height="44" class="xl72" style="height:33.0pt"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl65">求职者签名：</td>
+  <td class="xl92">　</td>
+  <td class="xl93">日<span style="mso-spacerun:yes">&nbsp;&nbsp; </span>期：</td>
+  <td colspan="4" class="xl101">　</td>
+ </tr>
+</tbody></table>
+</div>
+
+<iframe id="bsDoc" width="100%" frameborder="0" scrolling="auto" src=""></iframe>
+
+ <link href="~/css/stylesheet.css?5" rel="stylesheet" />
+        </div>
+
+    </td></tr></table>
+
+    </div>
+
+
+
+<!--批量打印-->
+<div id="printMore">
+        <!-- /.box-header -->
+<div class="box-body" ng-repeat="regForms in printData">
+
+<div style="page-break-after: always;" ng-if="$index>0"></div>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:
+ collapse;table-layout:fixed;">
+ <colgroup><col class="xl66" width="59" style="mso-width-source:userset;mso-width-alt:2157;
+ width:44pt">
+ <col class="xl66" width="16" span="2" style="mso-width-source:userset;mso-width-alt:
+ 585;width:12pt">
+ <col class="xl66" width="128" style="mso-width-source:userset;mso-width-alt:4681;
+ width:96pt">
+ <col class="xl66" width="73" style="mso-width-source:userset;mso-width-alt:2669;
+ width:55pt">
+ <col class="xl66" width="103" style="mso-width-source:userset;mso-width-alt:3766;
+ width:77pt">
+ <col class="xl66" width="110" style="mso-width-source:userset;mso-width-alt:4022;
+ width:83pt">
+ <col class="xl66" width="104" style="mso-width-source:userset;mso-width-alt:3803;
+ width:78pt">
+ <col class="xl66" width="38" style="mso-width-source:userset;mso-width-alt:1389;
+ width:29pt">
+ <col class="xl66" width="28" style="mso-width-source:userset;mso-width-alt:1024;
+ width:21pt">
+ <col class="xl66" width="24" style="mso-width-source:userset;mso-width-alt:877;
+ width:18pt">
+ <col class="xl66" width="36" style="mso-width-source:userset;mso-width-alt:1316;
+ width:27pt">
+ </colgroup><tbody>
+          <tr class=xl78 height=54 style='mso-height-source:userset;height:40.5pt'>
+  <td colspan=12 height=54 width=735 style='height:40.5pt;width:552pt'
+  align=left valign=top><span style='mso-ignore:vglayout;
+  position:absolute;z-index:1;margin-left:34px;margin-top:0px;width:138px;
+  height:65px'><img src="~/images/image002.png"></span><span
+  style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td colspan=12 height=54 class=xl132 width=735 style='height:40.5pt;
+    width:552pt'>面试登记表</td>
+   </tr>
+  </table>
+  </span></td>
+ </tr>
+ <tr height=17 style='mso-height-source:userset;height:12.75pt'>
+  <td height=17 class=xl69 style='height:12.75pt'></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+  <td class=xl66></td>
+ </tr>
+ <tr height=49 style='mso-height-source:userset;height:36.75pt'>
+  <td colspan=12 height=49 class=xl134 width=735 style='border-right:1pt solid black;
+  height:36.75pt;width:552pt'>欢迎您到携程参加面谈！为了保证面谈有效进行，请准确填写下表。其中打“<font
+  class="font7">*</font><font class="font9">”号的为必填项，其余为建议填写项。填写完成请及时告知招聘接待人员以便及时安排面谈。</font><font
+  class="font7"> </font><font class="font9">谢谢！</font></td>
+ </tr>
+ <tr height=21 style='mso-height-source:userset;height:15.75pt'>
+  <td colspan=12 height=21 class=xl137 style='border-right:1pt solid black;
+  height:15.75pt'>携程人力资源部</td>
+ </tr>
+
+<tr class="xl70" height="28" style="mso-height-source:userset;height:21.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:21.0pt">意向职位</td>
+  <td colspan="3" class="xl123" style="border-left:none">{{newModel.jobName}}</td>
+  <td rowspan="2" class="xl121" style="border-bottom:1pt solid black;border-top:
+  none">期望待遇</td>
+  <td colspan="5" class="xl123" width="230" style="border-right:1pt solid black;
+  border-left:none;width:173pt">基本月薪 {{regForms.profiles|getProperty:"Treatment"}}元（税前）</td>
+ </tr>
+ <tr class="xl70" height="28" style="mso-height-source:userset;height:21.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:21.0pt">意向部门</td>
+  <td colspan="3" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"IntentionDepartment"}}</td>
+  <td colspan="5" class="xl123" width="230" style="border-right:1pt solid black;
+  border-left:none;width:173pt">年收入<span style="mso-spacerun:yes">
+  </span>{{regForms.profiles|getProperty:"TreatmentYear"}}元（税前）</td>
+ </tr>
+ 
+ <tr class="xl71" height="28" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="28" class="xl67" style="height:22.0pt">工作状况</td>
+  <td colspan="3" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"WordCondition"}}</td>
+  <td class="xl83" style="border-top:none;border-left:none">可到职日期</td>
+  <td colspan="5" class="xl145" style="border-left:none">{{regForms.profiles|getProperty:"EOD"|timeFormat}}</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">中文姓名</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Name"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">性别</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"gender"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">出生年月</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Birthday"|timeFormat}}</td>
+  <td colspan="4" rowspan="4" class="xl140" style="border-right:1pt solid black"><img ng-src="{{printAvatar[$index]}}" style="width:112px;height:129px"></td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">身高</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Height"}}cm</td>
+  <td class="xl67" style="border-top:none;border-left:none">体重</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Weight"}}kg</td>
+  <td class="xl67" style="border-top:none;border-left:none">健康状况</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Healthy"}}</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl67" style="height:22.0pt">户籍地址</td>
+  <td colspan="2" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"DomicilePlace"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">身份证号码</td>
+  <td colspan="2" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"CertificateNumber"}}</td>
+ </tr>
+ <tr class="xl65" height="34" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="34" class="xl67" style="height:22.0pt">现居住地</td>
+  <td colspan="3" class="xl123" style="border-left:none">{{regForms.profiles|getProperty:"ResidenceState"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">籍贯/出生地</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"NativePlace"}}</td>
+ </tr>
+ <tr class="xl65" height="32" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="32" class="xl67" style="height:22.0pt">手机</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"Mobile"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">联系电话</td>
+  <td class="xl123" style="border-top:none;border-left:none">{{regForms.profiles|getProperty:"telephone"}}</td>
+  <td class="xl67" style="border-top:none;border-left:none">个人邮箱</td>
+  <td colspan="5" class="xl123" style="border-right:1pt solid black;border-left:
+  none">{{regForms.profiles|getProperty:"email"}}</td>
+ </tr>
+ <tr class="xl65" height="25" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="25" class="xl67" style="height:22.0pt">婚姻状况</td>
+  <td colspan="9" class="xl107" style="border-right:1pt solid black">&nbsp;&nbsp;&nbsp;&nbsp;{{regForms.profiles|getProperty:"WedState"}}</td>
+ </tr>
+ <tr class="xl65" height="36" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{printEduLen[$index]+2}}"  class="xl160" style="border-top:none">教育培训经历</td>
+  <td colspan="3" class="xl68" style="border-right:1pt solid black;border-left:
+  none">起止年月</td>
+  <td colspan="2" class="xl68" style="border-right:1pt solid black;border-left:none">毕业学校</td>
+  <td class="xl67" style="border-top:none;border-left:none">专业</td>
+  <td class="xl65">学历</td>
+  <td colspan="3" class="xl67">学历类型</td>
+  <td class="xl75" width="36" style="border-top:none;border-left:none;width:27pt">是否毕业</td>
+ </tr>
+
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.educationExperiences">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none">{{item.startTime}}-{{item.endTime}}</td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none">{{item.schoolName}}</td>
+      <td class="xl99" style="border-top:none;border-left:none">{{item.majorName}}</td>
+      <td class="xl99" style="border-left:none">{{item.educationLevelName}}</td>
+      <td colspan="3" class="xl99" width="90" style="border-right:1pt solid black; border-left:none;width:68pt">{{item.formsOfLearningName}}</td>
+      <td class="xl99" width="36" style="border-top:none;border-left:none;width:27pt">{{item.isFinished|boolTxt}}</td>
+     </tr>
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in printEmptyEdu[$index]">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none"></td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none"></td>
+      <td class="xl99" style="border-top:none;border-left:none"></td>
+      <td class="xl99" style="border-left:none"></td>
+      <td colspan="3" class="xl99" width="90" style="border-right:1pt solid black; border-left:none;width:68pt"></td>
+      <td class="xl99" width="36" style="border-top:none;border-left:none;width:27pt"></td>
+     </tr>
+    <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none"><b>外语水平</b></td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none"><b>计算机水平</b></td>
+      <td class="xl99" colspan="6"  style="border-top:none;border-left:none;"><b>其他技能或培训经历</b></td>
+     </tr>
+     <tr class="xl65" height="39" style="mso-height-source:userset;height:22.0pt">
+      <td colspan="3" height="39" class="xl99" style="height:22.0pt;border-left:none">{{regForms.profiles|getProperty:"ForeignLang"}}</td>
+      <td colspan="2" class="xl99" style="border-right:1pt solid black;border-left:none">{{regForms.profiles|getProperty:"ComputerSkill"}}</td>
+      <td class="xl99" colspan="6"  style="border-top:none;border-left:none;">{{regForms.profiles|getProperty:"OtherSkill"}}</td>
+     </tr>
+ <tr class="xl65" height="28" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="4" height="222" class="xl160" style="height:166.5pt;border-top:none">最近工作说明</td>
+  <td colspan="3" class="xl67" style="border-left:none">起止年月</td>
+  <td colspan="2" class="xl67" style="border-left:none">工作单位</td>
+  <td class="xl67" style="border-top:none;border-left:none">任职岗位</td>
+  <td class="xl67" style="border-left:none">所在城市</td>
+  <td colspan="4" class="xl67" style="border-left:none">岗位月薪</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none">{{regForms.workExperiences[0].startTime}}-{{regForms.workExperiences[0].endTime}}</td>
+  <td colspan="2" class="xl99" style="border-left:none">{{regForms.workExperiences[0].companyName}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{regForms.workExperiences[0].jobTitle}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{regForms.workExperiences[0].cityName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{regForms.workExperiences[0].salaryRange}}</td>
+ </tr>
+ <tr class="xl65" height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="5" height="30" class="xl68" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">工作内容</td>
+  <td colspan="2" class="xl68" style="border-right:1pt solid black;border-left:
+  none">主要业绩描述</td>
+  <td colspan="4" class="xl67" style="border-left:none">离职主要原因</td>
+ </tr>
+ <tr class="xl65" height="230" style="mso-height-source:userset;height:210pt">
+  <td colspan="5" height="230" class="xl163" style="border-right:1pt solid black;
+  height:210pt;border-left:none;border-bottom:1pt solid black">{{regForms.workExperiences[0].jobDuty}}</td>
+  <td colspan="2" class="xl163" style="border-right:1pt solid black;border-bottom:
+  1pt solid black">{{regForms.workExperiences[0].mainAchievement}}</td>
+  <td colspan="4" class="xl163" style="border-right:1pt solid black;border-bottom:1pt solid black">{{regForms.workExperiences[0].reasonOfLeaving}}</td>
+  </tr>
+
+  <tr height="12"></tr>
+
+</tbody></table>
+<div style="page-break-after: always;"></div>
+<table border="0" cellpadding="0" cellspacing="0" width="735" style="border-collapse:
+ collapse;table-layout:fixed;width:100%;">
+ <colgroup><col class="xl66" width="59" style="mso-width-source:userset;mso-width-alt:2157;
+ width:44pt">
+ <col class="xl66" width="16" span="2" style="mso-width-source:userset;mso-width-alt:
+ 585;width:12pt">
+ <col class="xl66" width="128" style="mso-width-source:userset;mso-width-alt:4681;
+ width:96pt">
+ <col class="xl66" width="73" style="mso-width-source:userset;mso-width-alt:2669;
+ width:55pt">
+ <col class="xl66" width="103" style="mso-width-source:userset;mso-width-alt:3766;
+ width:77pt">
+ <col class="xl66" width="110" style="mso-width-source:userset;mso-width-alt:4022;
+ width:83pt">
+ <col class="xl66" width="104" style="mso-width-source:userset;mso-width-alt:3803;
+ width:78pt">
+ <col class="xl66" width="38" style="mso-width-source:userset;mso-width-alt:1389;
+ width:29pt">
+ <col class="xl66" width="28" style="mso-width-source:userset;mso-width-alt:1024;
+ width:21pt">
+ <col class="xl66" width="24" style="mso-width-source:userset;mso-width-alt:877;
+ width:18pt">
+ <col class="xl66" width="36" style="mso-width-source:userset;mso-width-alt:1316;
+ width:27pt">
+
+ </colgroup><tbody><tr class="xl65" height="31" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{printWorkLen[$index]}}" class="xl160">其他工作经历</td>
+  <td colspan="3" class="xl67" style="border-left:none">起止年月</td>
+  <td colspan="2" class="xl67" style="border-left:none">工作单位</td>
+  <td class="xl67" style="border-left:none">岗位</td>
+  <td class="xl67" style="border-left:none">所在城市</td>
+  <td colspan="4" class="xl67" style="border-left:none">岗位月薪</td>
+ </tr>
+ <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.workExperiencesOther">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none">{{item.startTime|timeFormat}}-{{item.endTime|timeFormat}}</td>
+  <td colspan="2" class="xl99" style="border-left:none">{{item.companyName}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.jobTitle}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.cityName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{item.salaryRange}}</td>
+ </tr>
+  <tr class="xl65" height="38" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in printEmptyWork[$index]">
+  <td colspan="3" height="38" class="xl99" style="height:22.0pt;border-left:none"></td>
+  <td colspan="2" class="xl99" style="border-left:none"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td colspan="4" class="xl99" style="border-left:none"></td>
+ </tr>
+    
+ <tr class="xl65" height="27" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="{{printFamilyLen[$index]}}"  class="xl160" width="59" style="
+  width:44pt">主要家庭成员</td>
+  <td colspan="3" class="xl67" style="border-left:none">姓名</td>
+  <td class="xl67" style="border-left:none">关系</td>
+  <td colspan="3" class="xl67" style="border-left:none">工作单位(如无工作单位，填写家庭地址)</td>
+  <td colspan="4" class="xl67" style="border-left:none">所在城市</td>
+ </tr>
+<tr class="xl65" height="35" style="mso-height-source:userset;height:22.0pt" ng-repeat="item in regForms.familyList">
+  <td colspan="3" height="35" class="xl99" width="160" style="height:22.0pt; border-left:none;width:120pt">{{item.name}}</td>
+  <td class="xl99" style="border-top:none;border-left:none">{{item.relation}}</td>
+  <td colspan="3" class="xl99" style="border-left:none">{{item.companyName}}</td>
+  <td colspan="4" class="xl99" style="border-left:none">{{item.workPlace}}</td>
+</tr>
+<tr class="xl65" height="35" style="mso-height-source:userset;height:22.0pt" ng-repeat="x in printEmptyFamily[$index]">
+  <td colspan="3" height="35" class="xl99" width="160" style="height:22.0pt; border-left:none;width:120pt"></td>
+  <td class="xl99" style="border-top:none;border-left:none"></td>
+  <td colspan="3" class="xl99" style="border-left:none"></td>
+  <td colspan="4" class="xl99" style="border-left:none"></td>
+</tr>
+
+
+     <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td rowspan="25" height="657" class="xl102" width="59" style="height:492.75pt;
+  border-top:none;width:44pt">其他个人信息及求职意愿</td>
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+    height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+        您是否在携程公司工作过？<span style="mso-spacerun:yes">&nbsp;&nbsp;</span></span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl157" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question1"}} <span>{{regForms.otherInfoForCustom|getProperty:"question1des"}}</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾经或者正在应聘携程其他区域或分公司的岗位？<span style="mso-spacerun:yes">&nbsp;&nbsp;</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl157" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question2"}} <span>{{regForms.otherInfoForCustom|getProperty:"question2des"}}</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否有亲属在携程公司或与携程有直接竞争关系的公司工作？ <span style="mso-spacerun:yes">&nbsp;&nbsp;</span></td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl109" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;
+  </span>&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question3"}} <span>{{regForms.otherInfoForCustom|getProperty:"question3des"}}</span></td>
+ </tr>
+ <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="29" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾因犯罪行为而被刑事处罚过？<span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;
+  </span>●{{regForms.otherInfoForCustom|getProperty:"question4"}}</td>
+ </tr>
+ <tr height="29" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="29" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您是否曾因违纪或表现不佳而被单位解雇过？<span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;
+  </span>●{{regForms.otherInfoForCustom|getProperty:"question5"}}</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>您可以接受以下哪些班制的工作安排？</td>
+ </tr>
+ <tr height="20" style="mso-height-source:userset;height:15.0pt">
+  <td colspan="11" height="20" class="xl107" style="border-right:1pt solid black;
+  height:15.0pt;border-left:none">
+            
+      <span style="mso-spacerun:yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>{{regForms.otherInfoForCustom|getProperty:"question6"}}             </td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆<span style="mso-spacerun:yes">
+  </span>根据您择业的关注程度，请为以下项目排序：</td>
+ </tr>
+ <tr height="25" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="25" class="xl148" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none;text-align: left;">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question7"}}</td>
+ </tr>
+ <tr height="23" style="mso-height-source:userset;height:17.25pt">
+  <td colspan="11" height="23" class="xl104" style="border-right:1pt solid black;
+  height:17.25pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆
+  请简要说明您对加班的看法：</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl115" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question8"}}</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl104" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span>◆
+  请简要说明您对出差（非长期外派）的看法：</td>
+ </tr>
+ <tr height="24" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="24" class="xl115" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">&nbsp;&nbsp;&nbsp;{{regForms.otherInfoForCustom|getProperty:"question9"}}</td>
+ </tr>
+ <tr height="23" style="mso-height-source:userset;height:17.25pt">
+  <td colspan="11" height="23" class="xl107" style="border-right:1pt solid black;
+  height:17.25pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请分别用三组词语描述您的个人能力匹配本职位的优势和不足：</b></td>
+ </tr>
+ <tr height="53" style="mso-height-source:userset;height:39.75pt">
+  <td colspan="11" height="53" class="xl107" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">
+      <div>&nbsp;&nbsp;&nbsp;优势：{{regForms.otherInfoForCustom|getProperty:"question10"}}；{{regForms.otherInfoForCustom|getProperty:"question101"}}；{{regForms.otherInfoForCustom|getProperty:"question102"}}</div>
+      <div>&nbsp;&nbsp;&nbsp;不足：{{regForms.otherInfoForCustom|getProperty:"question103"}}；{{regForms.otherInfoForCustom|getProperty:"question104"}}；{{regForms.otherInfoForCustom|getProperty:"question105"}}</div>
+         </td>
+ </tr>
+
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;border-top:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请说明您的特长或业余爱好：</b></td>
+ </tr>
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;
+  height:22.0pt;border-left:none">
+  &nbsp;&nbsp;&nbsp;特长：{{regForms.otherInfoForCustom|getProperty:"question11"}}；业余爱好：{{regForms.otherInfoForCustom|getProperty:"question111"}}
+  </td>
+ </tr>
+ <tr height="30" style="mso-height-source:userset;height:22.0pt">
+  <td colspan="11" height="30" class="xl107" style="border-right:1pt solid black;border-top:1pt solid black;
+  height:22.0pt;border-left:none"><span style="mso-spacerun:yes">&nbsp;</span><b>◆
+  请简要说明您应聘本职位的三点理由：</b></td>
+ </tr>
+ <tr height="75" style="mso-height-source:userset;height:56.25pt">
+  <td colspan="11" height="75" class="xl115" style="border-right:1pt solid black;
+  height:56.25pt;border-left:none;border-bottom:none">
+  <div>&nbsp;&nbsp;&nbsp;1：{{regForms.otherInfoForCustom|getProperty:"question12"}}</div>
+  <div>&nbsp;&nbsp;&nbsp;2：{{regForms.otherInfoForCustom|getProperty:"question121"}}</div>
+  <div>&nbsp;&nbsp;&nbsp;3：{{regForms.otherInfoForCustom|getProperty:"question122"}}</div>
+             </td>
+ </tr>
+ <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" height="0"></td>
+ </tr>
+ <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" height="0"></td>
+ </tr>
+
+  <tr height="0" style="mso-height-source:userset;height:0pt">
+  <td colspan="11" class="xl107" style="border-right:1pt solid black;border-left:none"></td>
+ </tr>
+
+ <tr height="26" style="mso-height-source:userset;height:19.5pt">
+  <td colspan="12" height="26" class="xl161" width="735" style="height:19.5pt;
+  width:552pt">求职者声明：</td>
+ </tr>
+ <tr height="26" style="mso-height-source:userset;height:19.5pt">
+  <td colspan="12" height="26" class="xl94" width="735" style="height:19.5pt;
+  width:552pt"></td>
+ </tr>
+ <tr height="44" style="mso-height-source:userset;height:33.0pt">
+  <td height="44" class="xl72" style="height:33.0pt"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl72"></td>
+  <td class="xl65">求职者签名：</td>
+  <td class="xl92">　</td>
+  <td class="xl93">日<span style="mso-spacerun:yes">&nbsp;&nbsp; </span>期：</td>
+  <td colspan="4" class="xl101">　</td>
+ </tr>
+</tbody></table>
+</div>       
+ <link href="~/css/stylesheet.css?5" rel="stylesheet" />
+ </div>
+}
+@section scripts{
+    <script src="~/js/app/xiecheng/index.js?12333"></script>
+    <script src="~/js/app/xiecheng/select2.min.js"></script>
+    <script src="~/js/app/xiecheng/angular-sanitize.min.js"></script>
+    <script src="~/js/app/xiecheng/ng-csv.js"></script>
+}
+
+@section head{
+   <link href="~/css/select2.css" rel="stylesheet" />
+   <link href="~/css/select2-bootstrap.css" rel="stylesheet" />
+    <style>
+        .label-div span{display:inline-block;cursor:pointer;min-width:80px;line-height:20px;text-align: center;margin-right:10px;background:rgb(240,230,60);font-size:12px}
+        dl dt{margin-top:10px;margin-bottom:10px;}
+        dl dd{display:inline-block;cursor:pointer;min-width:80px;position:relative;line-height:20px;text-align: center;margin-right:20px;background:#fffad6;font-size:12px;}
+        .ul-list{list-style: none;padding:0;margin:0;}
+        .ul-list li{padding:10px 0;text-align:center;cursor: pointer;width:90px;border-bottom:1px solid #aaa;}
+        .ul-list li:hover,.ul-list li.active{background-color:#666;color:#fff;}
+        .badge{background-color:#3c8dbc;color:#fff;font-size:12px;padding:3px 5px;border-radius:3px;display:inline-block;}
+        .deltags{position:absolute;    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    right: 0;display:none;border-radius:50%;background-color:#f00;color:#fff;margin-right: -13px;}
+        .tagsdl dd:hover .deltags{display:inline-block;}
+        .sidebar-btn{position:absolute;left:0;top:0;margin-left:-81px;line-height:40px;width:80px;display:inline-block;text-align:center;}
+        .sidebar-btn a{display: block;height:40px;background-color:#fff;color:#333;border-bottom:1px solid #f2f2f2;}
+        .sidebar-btn a:hover{background-color:#f2f2f2;color:#000;}
+        .mark{background-color:rgba(0,0,0,0.5);position:fixed;top:0;left:0;width:100%;height:100%;}
+        .processBtn{cursor:pointer;display:inline-block;margin-left:15px;position:relative;background-color:#f1f1f1;padding:4px 0;text-align:center;width:15%;;border-radius:4px;}
+        .processArraw:last-child:after{content:" ";}
+        .processBtn.active{background-color:#e08e0b;color:#fff;}
+        .processArraw:after{content:">";position:absolute;right:-12px;color:#000;}
+        .processBtn.active:after{color:#000;}
+    </style>
+}

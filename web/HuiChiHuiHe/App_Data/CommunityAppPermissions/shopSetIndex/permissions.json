@@ -1,0 +1,15 @@
+{
+  "Url": "/shopset/index",
+  "Sources": [
+    "/api/shopsetapi/getpagedlist",
+    "/api/shopsetapi/add",
+    "/api/shopsetapi/update",
+    "/api/shopsetapi/setisdelete",
+    "/api/shopbrandsetapi/getlist",
+
+    "/api/shopactorsetapi/getpagedlist",
+    "/api/shopactorsetapi/add",
+    "/api/shopactorsetapi/setisdelete",
+    "/api/shopactorsetapi/getlist"
+  ]
+}

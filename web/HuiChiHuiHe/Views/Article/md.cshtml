@@ -1,0 +1,9 @@
+﻿@model ZRui.Web.ArticleModels.DetailModel
+@inject Microsoft.Extensions.Options.IOptions<MemberAPIOptions> options
+@{
+    Layout = null;
+    var content = Model.GetContent();
+    content = content.Replace("(/content/article", $"({options.Value.Host}/content/article");
+}
+## @Html.Raw(Model.Article.Title)
+@Html.Raw(content)

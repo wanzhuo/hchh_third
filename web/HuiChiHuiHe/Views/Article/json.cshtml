@@ -1,0 +1,15 @@
+﻿@model ZRui.Web.ArticleModels.DetailModel
+@inject Microsoft.Extensions.Options.IOptions<MemberAPIOptions> options
+@{
+    Layout = null;
+    this.Context.Response.ContentType = "application/json";
+    var content = Model.GetContent();
+    content = content.Replace("(/content/article", $"({options.Value.Host}/content/article");
+    var json = Newtonsoft.Json.JsonConvert.SerializeObject(new
+    {
+        title = Model.Article.Title,
+        content = content
+
+    });
+}
+@Html.Raw(json)

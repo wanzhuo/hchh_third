@@ -1,0 +1,9 @@
+{
+  "Url": "/scheduledtaskset/index",
+  "Sources": [
+    "/api/scheduledtasksetapi/getpagedlist",
+    "/api/scheduledtasksetapi/add",
+    "/api/scheduledtasksetapi/update",
+    "/api/scheduledtasksetapi/setisdelete"
+  ]
+}

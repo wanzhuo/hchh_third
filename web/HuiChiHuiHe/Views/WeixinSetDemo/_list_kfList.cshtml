@@ -1,0 +1,38 @@
+﻿@{ Layout = null; }
+<!-- Default box -->
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">客服列表</h3>
+        <a class="btn btn-link btn-sm" ng-click="getKFList()"><i class="fa fa-refresh"></i></a>
+        <a class="btn btn-link btn-sm" ng-click="showView('addKFAccount')"><i class="fa fa-plus"></i></a>
+        <a class="btn btn-link btn-sm" ng-click="showView('inviteKFWorker')">邀请绑定</a>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <table class="table colResizable">
+            <thead>
+                <tr>
+                    <th style="width:70px;text-align:center;">序号</th>
+                    <th>kf_account</th>
+                    <th>kf_headimgurl</th>
+                    <th>kf_id</th>
+                    <th>kf_nick</th>
+                    <th>删除</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="item in kfList">
+                <td style="text-align:center;">{{$index+1}}</td>
+                <td><a href="javascript:;" ng-click="initUpdateKFAccount(item)">{{item.kf_account}}</a></td>
+                <td>{{item.kf_headimgurl}}</td>
+                <td>{{item.kf_id}}</td>
+                <td>{{item.kf_nick}}</td>
+                <td style="text-align:center;"><a href="javascript:;" data-fn-delete="delKFAccount(item.kf_account)" delete-confirm="确定移除'{{item.kf_account}}'?"><i class="fa fa-remove"></i></a></td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+    </div>
+</div>
+<!-- /.box -->

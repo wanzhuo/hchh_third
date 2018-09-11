@@ -1,0 +1,11 @@
+<script>
+   //document.write('/dist/index.html#/'+GetQueryString('code')+'/'+encodeURIComponent(GetQueryString('state'))+'/oauth')
+   window.location.replace('/dist/index.html#/'+GetQueryString('code')+'/'+encodeURIComponent(GetQueryString('state'))+'/oauth')
+   //window.location.replace('/dist/index.html#/'+GetQueryString('code')+'/'+GetQueryString('state')+'/oauth')
+//取url参数 
+   function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+</script>

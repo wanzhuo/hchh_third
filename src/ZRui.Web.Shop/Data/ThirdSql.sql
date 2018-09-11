@@ -1,0 +1,123 @@
+--/*
+--Navicat MySQL Data Transfer
+
+--Source Server         : testdb
+--Source Server Version : 50721
+--Source Host           : 47.106.166.191:3336
+--Source Database       : hchh
+
+--Target Server Type    : MYSQL
+--Target Server Version : 50721
+--File Encoding         : 65001
+
+--Date: 2018-09-06 09:06:17
+--*/
+
+--SET FOREIGN_KEY_CHECKS=0;
+
+---- ----------------------------
+---- Table structure for merchant
+---- ----------------------------
+--DROP TABLE IF EXISTS `merchant`;
+--CREATE TABLE `merchant` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `DaDaShopId` int(11) DEFAULT NULL,
+--  `Mobile` varchar(255) DEFAULT NULL,
+--  `CityName` varchar(255) DEFAULT NULL,
+--  `EnterpriseName` varchar(255) DEFAULT NULL,
+--  `EnterpriseAddress` varchar(255) DEFAULT NULL,
+--  `ContactName` varchar(255) DEFAULT NULL,
+--  `ContactPhone` varchar(255) DEFAULT NULL,
+--  `Email` varchar(255) DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+---- ----------------------------
+---- Table structure for thirdapidata
+---- ----------------------------
+--DROP TABLE IF EXISTS `thirdapidata`;
+--CREATE TABLE `thirdapidata` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `DaDaShopId` int(11) DEFAULT NULL,
+--  `OrderId` varchar(100) DEFAULT NULL,
+--  `JsonData` varchar(8000) DEFAULT NULL,
+--  `ResultData` varchar(8000) DEFAULT NULL,
+--  `AddTime` datetime DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8;
+
+---- ----------------------------
+---- Table structure for thirdmoneyreport
+---- ----------------------------
+--DROP TABLE IF EXISTS `thirdmoneyreport`;
+--CREATE TABLE `thirdmoneyreport` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `OrderNumber` varchar(50) DEFAULT NULL,
+--  `Amount` double(10,2) DEFAULT NULL,
+--  `AddTime` datetime DEFAULT NULL,
+--  `ProduceType` int(11) DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
+
+---- ----------------------------
+---- Table structure for thirdorder
+---- ----------------------------
+--DROP TABLE IF EXISTS `thirdorder`;
+--CREATE TABLE `thirdorder` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `ClientId` varchar(50) DEFAULT NULL,
+--  `OrderNumber` varchar(50) DEFAULT NULL,
+--  `OrderStatus` int(11) DEFAULT NULL,
+--  `CancelReason` varchar(255) DEFAULT NULL,
+--  `CancelFrom` int(11) DEFAULT NULL,
+--  `UpdateTime` int(32) DEFAULT NULL,
+--  `Signature` varchar(255) DEFAULT NULL,
+--  `DmId` int(11) DEFAULT NULL,
+--  `DmName` varchar(50) DEFAULT NULL,
+--  `DmMobile` varchar(50) DEFAULT NULL,
+--  `ThirdType` int(11) DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+
+---- ----------------------------
+---- Table structure for thirdrecharge
+---- ----------------------------
+--DROP TABLE IF EXISTS `thirdrecharge`;
+--CREATE TABLE `thirdrecharge` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `DaDaShopId` int(11) DEFAULT NULL,
+--  `Amount` decimal(30,2) DEFAULT NULL,
+--  `AddTime` datetime DEFAULT NULL,
+--  `RechargeType` int(255) DEFAULT NULL,
+--  `VerificationCode` varchar(255) DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=282 DEFAULT CHARSET=utf8;
+
+---- ----------------------------
+---- Table structure for thirdshop
+---- ----------------------------
+--DROP TABLE IF EXISTS `thirdshop`;
+--CREATE TABLE `thirdshop` (
+--  `Id` int(11) NOT NULL AUTO_INCREMENT,
+--  `ShopId` int(11) DEFAULT NULL,
+--  `StationName` varchar(255) DEFAULT NULL,
+--  `Business` int(255) DEFAULT NULL,
+--  `CityName` varchar(255) DEFAULT NULL,
+--  `AreaName` varchar(255) DEFAULT NULL,
+--  `StationAddress` varchar(255) DEFAULT NULL,
+--  `Lng` double DEFAULT NULL,
+--  `Lat` double DEFAULT NULL,
+--  `ContactName` varchar(255) DEFAULT NULL,
+--  `Phone` varchar(255) DEFAULT NULL,
+--  `OriginShopId` varchar(100) DEFAULT NULL,
+--  `IdCard` varchar(255) DEFAULT NULL,
+--  `UserName` varchar(255) DEFAULT NULL,
+--  `PassWord` varchar(255) DEFAULT NULL,
+--  `Status` int(11) DEFAULT NULL,
+--  PRIMARY KEY (`Id`)
+--) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;

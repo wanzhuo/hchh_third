@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+<!-- Default box -->
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Post消息列表</h3>
+        <a class="btn btn-link btn-sm" ng-click="getCustomMessageLogs()"><i class="fa fa-refresh"></i></a>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <table class="table colResizable">
+            <thead>
+                <tr>
+                    <th style="width:70px;text-align:center;">序号</th>
+                    <th>内容</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="item in customMessageLogs">
+                <td style="text-align:center;">{{pageSize*(pageIndex-1) + ($index+1)}}</td>
+                <td>{{item.xml}}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+    </div>
+</div>
+<!-- /.box -->

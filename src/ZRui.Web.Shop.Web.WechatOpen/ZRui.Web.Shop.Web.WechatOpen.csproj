@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+    <Version>0.2.9.4266</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="ZRui.Web.Common" Version="1.1.0" />
+    <PackageReference Include="ZRui.Web.Core" Version="2.3.14.7035" />
+    <PackageReference Include="ZRui.Web.Core.Finance.SwiftpassPay" Version="0.1.6.3338" />
+  </ItemGroup>
+
+</Project>

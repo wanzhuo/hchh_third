@@ -1,0 +1,14 @@
+{
+  "Url": "/shopcommoditystockset/index",
+  "Sources": [
+    "/api/shopcommoditystocksetapi/getlist",
+    "/api/shopcommoditystocksetapi/add",
+    "/api/shopcommoditystocksetapi/update",
+    "/api/shopcommoditystocksetapi/setisdelete",
+    "/api/shopcommoditystocksetapi/getshopbrands",
+    "/api/shopcommoditystocksetapi/getshops",
+    "/api/shopcommoditystocksetapi/getskuitems",
+
+    "/api/shopbrandcommoditysetapi/getpagedlist"
+  ]
+}

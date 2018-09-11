@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-plus" ng-dblclick="viewName = 'index'"></i> 添加</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="addError!=''">
+        <p>
+            <b>添加失败：</b>{{addError}}
+        </p>
+    </div>
+    <div class="form-group">
+        <label>标题</label>
+        <input class="form-control" ng-model="shopCallingQueueProductSet.newModel.title" type="text" />
+    </div>
+    <div class="form-group">
+        <label>说明</label>
+        <input class="form-control" ng-model="shopCallingQueueProductSet.newModel.detail" type="text" />
+    </div>
+</div>
+<div class="box-footer">
+    <button class="btn btn-primary" ng-click="shopCallingQueueProductSet.add()">确定添加</button>
+</div>
+<!-- /.box-body -->

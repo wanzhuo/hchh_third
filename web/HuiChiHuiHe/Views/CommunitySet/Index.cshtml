@@ -1,0 +1,264 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "communitySetIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            群组管理
+            <small>管理系统的群组</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            @*<li><a href="#">Examples</a></li>*@
+            <li class="active">群组</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">群组列表</h3>
+                <a class="btn btn-link btn-sm" ng-click="initAdd()"><i class="fa fa-plus"></i></a>
+                <div class="box-tools pull-right">
+                    <input type="text" class="form-control pull-right" ng-change="load()" placeholder="行数" ng-model="pageSize" title="行数" style="width:45px;">
+                </div>
+            </div>
+            <div class="box-body table-responsive no-padding">
+                <table class="table colResizable">
+                    <thead>
+                        <tr>
+                            <th style="width:70px;text-align:center;">序号</th>
+                            <th style="width:100px;">标识</th>
+                            <th style="width:100px;">群组名称</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align:center;">---</td>
+                        <td><input type="text" class="form-control input-sm" ng-model="searchModel.email" ng-change="load()" /></td>
+                        <td><input type="text" class="form-control input-sm" ng-model="searchModel.truename" ng-change="load()" /></td>
+                    </tr>
+                    <tr ng-repeat="item in items">
+                        <td style="text-align:center;">{{pageSize*(pageIndex-1) + ($index+1)}}</td>
+                        <td><a href="javascript:;" ng-click="edit(item)">{{item.flag}}</a></td>
+                        <td>{{item.name}}</td>
+
+                    </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <ul ng-show="totalCount>pageSize" uib-pagination total-items="totalCount" items-per-page="pageSize" ng-model="pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="load()"></ul>
+            </div>
+        </div>
+        <!-- /.box -->
+
+
+
+    </section>
+    <!-- /.content -->
+</section>
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-plus" ng-dblclick="viewName = 'index'"></i> 添加</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="addError!=''">
+                <p>
+                    <b>添加失败：</b>{{addError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>群组名称</label>
+                <input class="form-control" ng-model="newModel.name" type="text" />
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="add()">确定添加</button>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> {{current.name}}({{current.flag}}) 详细</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="updateError!=''">
+                <p>
+                    <b>操作失败：</b>{{updateError}}
+                </p>
+            </div>
+            <div class="callout callout-success" ng-show="updateSuccess!=''">
+                <p>
+                    <b>操作失败：</b>{{updateSuccess}}
+                </p>
+            </div>
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#basic" data-toggle="tab">基本</a></li>
+                    <li><a href="#members" data-toggle="tab">成员</a></li>
+                    <li><a href="#apps" data-toggle="tab">应用</a></li>
+                    <li><a href="#managers" data-toggle="tab">管理员</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="basic">
+                        <div class="form-group">
+                            <label>群组名称</label>
+                            <input class="form-control" ng-model="current.name" type="text" />
+                        </div>
+                        <button class="btn btn-primary" ng-click="updateName()">保存</button>
+                    </div>
+                    <div class="tab-pane" id="members">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>成员名称</th>
+                                    <th style="width:70px;">删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in current.members">
+                                    <td>
+                                        {{item.username}}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" data-fn-delete="removeMember(item.username)" delete-confirm="确定移除成员'{{item.username}}'?">移除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <input class="form-control" type="text" ng-model="addMemberModel.username" />
+                        </div>
+                        <button ng-click="addMember()" class="btn btn-primary">添加</button>
+                    </div>
+                    <div class="tab-pane" id="apps">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>应用名称</th>
+                                    <th style="width:100px; text-align:center">默认打开</th>
+                                    <th style="width:100px; text-align:center">是否可用</th>
+                                    <th style="width:70px;">配置</th>
+                                    <th style="width:100px;">编辑</th>
+                                    <th style="width:70px;">删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in current.apps">
+                                    <td>
+                                        <span ng-show="!item.isEdit">{{item.name}}</span>
+                                        <span ng-show="item.isEdit"><input class="form-control" type="text" ng-model="item.name" /></span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <label class="switch">
+                                            <input type="checkbox" ng-model="item.isDefaultOpen" ng-click="setAppIsDefaultOpen(item)">
+                                            <span class="check"></span>
+                                        </label>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <label class="switch">
+                                            <input type="checkbox" ng-model="item.isEnabled" ng-click="setAppIsDisabled(item)">
+                                            <span class="check"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" ng-click="openSettingPage(item)">配置</a>
+                                    </td>
+                                    <td>
+                                        <a ng-show="!item.isEdit" href="javascript:;" ng-click="item.isEdit=true">修改</a>
+                                        <a ng-show="item.isEdit" ng-click="updateAppName(item)" href="javascript:;">确定</a>
+                                        <a ng-show="item.isEdit" href="javascript:;" ng-click="item.isEdit=false">取消</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" data-fn-delete="removeApp(item)" delete-confirm="确定移除应用'{{item.name}}'?">移除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <label>应用名称</label>
+                            <input type="text" class="form-control" ng-model="addAppModel.name" />
+                        </div>
+                        <div class="form-group">
+                            <label>应用链接</label>
+                            <input type="text" class="form-control" ng-model="addAppModel.url" />
+                        </div>
+                        <button ng-click="addApp()" class="btn btn-primary">添加</button>
+                        @*<hr/>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='产品管理';addAppModel.url='/product/index'">产品管理</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='客户管理';addAppModel.url='/customer/index'">客户管理</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='客户财务';addAppModel.url='/customerAccount/index'">客户财务</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='客户私密财务';addAppModel.url='/customerPrivateAccount/index'">客户私密财务</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='客户订单';addAppModel.url='/customerOrder/index'">客户订单</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='仓库设定';addAppModel.url='/storehouse/index'">仓库设定</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='收支项目';addAppModel.url='/financeCategory/index'">收支项目</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='账户管理';addAppModel.url='/financeAccount/index'">账户管理</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='账户流水';addAppModel.url='/financeAccountLog/index'">账户流水</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='人员管理';addAppModel.url='/memberset/index'">人员管理</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='群组管理';addAppModel.url='/communityset/index'">群组管理</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='入库';addAppModel.url='/supplierOrder/index'">入库</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='库存';addAppModel.url='/storehouseStock/index'">库存</a>
+                            <a href="javascript:;" class="btn btn-link" ng-click="addAppModel.name='转仓';addAppModel.url='/storehouseOrder/index'">转仓</a>*@
+                    </div>
+                    <div class="tab-pane" id="managers">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>管理员名称</th>
+                                    <th style="width:70px;">删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in current.managers">
+                                    <td>
+                                        {{item}}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" data-fn-delete="removeManager(item)" delete-confirm="确定移除管理员'{{item}}'?">移除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="addManagerModel.username" />
+                        </div>
+                        <button class="btn btn-primary" ng-click="addManager()">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+}
+@section scripts{
+    <script src="~/js/app/communitySet/index.js?v=1.2.1"></script>
+}
+
+@section head{
+
+}

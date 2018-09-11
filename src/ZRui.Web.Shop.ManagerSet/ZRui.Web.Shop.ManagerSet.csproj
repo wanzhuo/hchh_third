@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+    <Version>1.6.5.45218</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>bin\ZRui.Web.Shop.ManagerSet.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.6.19" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.1" />
+    <PackageReference Include="ZRui.Web.Core" Version="2.3.14.7036" />
+    <PackageReference Include="ZRui.Web.Core.Finance.MySql" Version="0.1.0.2" />
+    <PackageReference Include="ZRui.Web.Core.Finance.WeChatPay" Version="0.0.2.32" />
+    <PackageReference Include="ZRui.Web.Core.Printer.MySql" Version="1.0.2.23" />
+    <PackageReference Include="ZRui.Web.Core.Wechat.Open.Controllers" Version="0.1.1.4241" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZRui.Web.Core.Finance.SwiftpassPay\ZRui.Web.Core.Finance.SwiftpassPay.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">{{currentCategory.title}}文章列表</h3>
+        <a class="btn btn-link btn-sm" ng-click="initAdd()" ng-if="currentCategory!=null"><i class="fa fa-plus"></i></a>
+        <button type="file" class="btn btn-link btn-sm" ng-if="currentCategory!=null && currentListViewType==1" ngf-select="addImages($files)" accept="image/*" multiple="multiple"><i class="fa fa-upload"></i></button>
+
+        <div class="box-tools pull-right form-inline">
+            <button class="btn btn-primary" ng-click="showMoveToCategoryDialog('dialog_moveto_categorg')">移动到...</button>&nbsp;
+            <select class="form-control" ng-model="currentListViewType" ng-options="listViewType.value as listViewType.name for listViewType in listViewTypeList" ng-change="changeListViewType()"></select>&nbsp;
+            <input type="text" class="form-control pull-right" ng-change="load()" placeholder="行数" ng-model="pageSize" title="行数" style="width:45px;">
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <div ng-if="currentListViewType!=1 && currentListViewType!=2">
+            @{await Html.RenderPartialAsync("_index_main_body_default");}
+        </div>
+        <div ng-if="currentListViewType==1">
+            @{await Html.RenderPartialAsync("_index_main_body_image");}
+        </div>
+        <div ng-if="currentListViewType==2">
+            @{await Html.RenderPartialAsync("_index_main_body_link");}
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+        <ul ng-show="totalCount>pageSize" uib-pagination total-items="totalCount" items-per-page="pageSize" ng-model="pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="load()"></ul>
+    </div>
+</div>

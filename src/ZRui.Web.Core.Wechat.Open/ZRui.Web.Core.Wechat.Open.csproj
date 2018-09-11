@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Version>0.4.1.4348</Version>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.6\ZRui.Web.Core.Wechat.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
+
+    <PackageReference Include="Senparc.Weixin" Version="4.22.2" />
+
+    <PackageReference Include="Senparc.Weixin.Cache.Redis" Version="1.6.1" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="14.10.13" />
+    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="5.3.0" />
+    <PackageReference Include="Senparc.Weixin.Open" Version="2.9.1" />
+    <PackageReference Include="Senparc.Weixin.WxOpen" Version="1.9.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0002" />
+    <PackageReference Include="ZRui.Web.Core" Version="2.3.14.7035" />
+    <PackageReference Include="ZRui.Web.Sms" Version="1.0.0" />
+
+  </ItemGroup>
+
+</Project>

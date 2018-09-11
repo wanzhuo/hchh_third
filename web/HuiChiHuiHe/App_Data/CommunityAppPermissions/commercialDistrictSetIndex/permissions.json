@@ -1,0 +1,9 @@
+{
+  "Url": "/commercialdistrictset/index",
+  "Sources": [
+    "/api/commercialdistrictsetapi/getpagedlist",
+    "/api/commercialdistrictsetapi/add",
+    "/api/commercialdistrictsetapi/update",
+    "/api/commercialdistrictsetapi/setisdelete"
+  ]
+}

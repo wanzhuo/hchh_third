@@ -1,0 +1,57 @@
+﻿@model ZRui.Web.CommunityModels.AppSettingModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "communityAppSettingController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+
+<section class="content-header" ng-init="init('@Model.AppFlag','@Model.CommunityFlag')">
+    <h1>
+        应用设置
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">应用设置</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="callout callout-danger" ng-show="loadError!=''">
+        <p>
+            <b>加载失败：</b>{{loadError}}
+        </p>
+    </div>
+    <div ng-show="loadError==''">
+        <div class="callout callout-danger" ng-show="updateError!=''">
+            <p>
+                <b>更新失败：</b>{{updateError}}
+            </p>
+        </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">编辑</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-sm btn-primary" title="保存" ng-click="updateSettings()">
+                        <i class="fa fa-save"></i> 
+                        <span ng-show="updating">正在保存...</span>
+                        <span ng-show="!updating">保存</span>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <textarea class="form-control" ng-model="settingsContent" rows="25"></textarea>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script src="~/lib/jsonlint/lib/jsonlint.js"></script>
+    <script src="/js/app/community/appSetting.js?v=1.1"></script>
+}
+
+
+
+

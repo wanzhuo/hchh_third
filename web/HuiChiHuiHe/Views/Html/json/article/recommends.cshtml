@@ -1,0 +1,8 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<ArticleOptions> articleOptions
+@{
+    Layout = null;
+    this.Context.Response.ContentType = "application/json";
+    var communityFlag = articleOptions.Value.DefaultCommunityFlag;
+    var appFlag = articleOptions.Value.DefaultAppFlag;
+}
+@await Component.InvokeAsync("PartialArticleList", new { viewName = "json", CommunityFlag = communityFlag, isRecommand = true, AppFlag = appFlag, rows = 15, orderName = "~id" })

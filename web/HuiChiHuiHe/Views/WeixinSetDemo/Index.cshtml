@@ -1,0 +1,56 @@
+﻿@model ZRui.Web.CommunityArgsModel 
+@{ 
+    ViewBag.Title = "Detail"; 
+    ViewBag.ngController = "weixinDemoSetIndexController"; 
+    Layout= "~/Views/Shared/_LayoutMember.cshtml"; 
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            微信Demo
+            <small>微信功能实现</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            @*
+            <li><a href="#">Examples</a></li>*@
+            <li class="active">微信Dmeo</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        @{await Html.RenderPartialAsync("_list_customMessageLogs");}
+        @{await Html.RenderPartialAsync("_list_kfList");}
+        @{await Html.RenderPartialAsync("_list_onlineKFList");}
+        @{await Html.RenderPartialAsync("_list_waitcaseKFSession");}
+        @{await Html.RenderPartialAsync("_list_msgList");}
+        @{await Html.RenderPartialAsync("_list_customer_session_list");}
+    </section>
+    <!-- /.content -->
+</section>
+@section detailView{
+        @{await Html.RenderPartialAsync("_detailView_addKFAccount");}
+        @{await Html.RenderPartialAsync("_detailView_inviteKFWorker");}
+        @{await Html.RenderPartialAsync("_detailView_updateKFAccount");}
+        @{await Html.RenderPartialAsync("_detailView_send");}
+        @{await Html.RenderPartialAsync("_detailView_edit_customer_session");}
+
+<div class="callout callout-danger" ng-show="detailViewError!=''">
+    <p>
+        <b>操作失败：</b>{{detailViewError}}
+    </p>
+</div>
+<div class="callout callout-success" ng-show="detailViewSuccess!=''">
+    <p>
+        <b>操作成功：</b>{{detailViewSuccess}}
+    </p>
+</div>
+}
+
+
+@section scripts{
+<script src="~/js/app/weixinDemoSet/index.js"></script>
+} 
+
+@section head{ }

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+    <Version>2.9.4.4571</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="4.0.1" />
+    <PackageReference Include="ZRui.Web.Article.Data" Version="1.0.0" />
+    <PackageReference Include="ZRui.Web.Core" Version="2.3.14.7036" />
+    <PackageReference Include="ZRui.Web.Core.Finance" Version="0.1.5.43" />
+    <PackageReference Include="ZRui.Web.Core.Wechat.Open" Version="0.4.1.4348" />
+  </ItemGroup>
+
+</Project>

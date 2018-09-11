@@ -1,0 +1,139 @@
+﻿@model ZRui.Web.MemberModels.IndexModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@Model.MemberAPIOptions.Title | 管理中心</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/lib/ionicons/css/ionicons.min.css">
+    <link href="/lib/select2/dist/css/select2.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/lib/AdminLTE/dist/css/AdminLTE.min.css">
+    <link href="/lib/dragula/dist/dragula.css" rel="stylesheet" />
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/lib/AdminLTE/dist/css/skins/_all-skins.min.css">
+    <link href="/lib/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
+    <link href="/lib/angular-hotkeys/hotkeys.css" rel="stylesheet" />
+    <link href="/css/siteMember.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/lib/html5shiv/dist/html5shiv.min.js"></script>
+    <script src="/lib/respond/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="app" class="hold-transition skin-blue sidebar-mini fixed" ng-app="app" ng-controller="memberIndexController">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+        @{await Html.RenderPartialAsync("_member_header",Model);}
+
+        <!-- =============================================== -->
+        <!-- Left side column. contains the sidebar -->
+        @{await Html.RenderPartialAsync("_member_main_sidebar");}
+        <!-- =============================================== -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div id="{{item.id}}" ng-repeat="item in tabsData" ng-show="item.active" style="height:100%; padding-bottom:10px;">
+                <iframe style="border: none; display: block; height: 100%; background-color:#fff; width: 100%; overflow-y: scroll;" ng-src="{{item.url}}"></iframe>
+            </div>
+        </div>
+        <!-- /.content-wrapper -->
+
+        
+        <footer class="main-footer">
+            <a ng-repeat="item in tabsData" ng-click="selectTab(item)" class="btn btn-sm" ng-class="{'btn-primary':item.active}">
+                {{item.title}}&nbsp;&nbsp;
+                <span class="badge" ng-show="item.canClose" ng-click="removeTab(item)"><i class="fa fa-remove"></i></span>
+            </a>
+        </footer>
+
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/lib/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/lib/AdminLTE/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/lib/AdminLTE/dist/js/app.min.js"></script>
+    <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/select2/dist/js/select2.js"></script>
+    <script src="/lib/angular-ui-select/dist/select.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/lib/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="/lib/dragula/dist/dragula.js"></script>
+    <script src="/lib/angular-dragula/dist/angular-dragula.min.js"></script>
+
+    <script src="/lib/artDialog/dist/dialog-plus-min.js"></script>
+    <script src="/lib/angular-validation/dist/angular-validation.min.js"></script>
+    <script src="/lib/angular-validation/dist/angular-validation-rule.min.js"></script>
+    <script src="/lib/mousetrap.min.js"></script>
+    <script src="/lib/angular-hotkeys/hotkeys-native.js"></script>
+    <script src="/lib/ngDialog/js/ngDialog.min.js"></script>
+    <script src="/lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="/lib/paste.js"></script>
+    <script src="/lib/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js"></script>
+    <script src="/lib/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="/lib/ng-file-upload/ng-file-upload-all.min.js"></script>
+    <script>
+        var abc = {};
+        abc.showNotify = function (title, content, type, isNotify) {
+            //abc.showNotify(title, content, type, isNotify);
+        }
+        abc.openPage = function (flag, name, url) {
+            var element = angular.element(document.getElementById("app"));
+            var scope = element.scope();
+            scope.openPage(flag, name, url);
+            scope.$apply();
+        }
+        function openPage(flag, name, url) {
+            abc.openPage(flag, name, url);
+        }
+        $(function () {
+            window.onresize = resize;
+            resize();
+
+            $(".defaultOpen").click();
+        });
+
+        function resize() {
+            var window_height = $(window).height();
+            var height = window_height - $('.main-footer').outerHeight() - 106;
+            $(".content-wrapper").css('height', height);
+
+            if ($.AdminLTE.options.sidebarSlimScroll) {
+                if (typeof $.fn.slimScroll != 'undefined') {
+                    //Destroy if it exists
+                    $(".detailView").find(".box").slimScroll({ destroy: true }).height("auto");
+                    //Add slimscroll
+                    $(".detailView").find(".box:visible").slimscroll({
+                        height: height,
+                        color: "rgba(0,0,0,0.2)",
+                        size: "10px",
+                    });
+                }
+            }
+        }
+    </script>
+    <script src="/js/app/app.js?v1.1"></script>
+    <script src="/js/app/member/index.js?231"></script>
+</body>
+</html>

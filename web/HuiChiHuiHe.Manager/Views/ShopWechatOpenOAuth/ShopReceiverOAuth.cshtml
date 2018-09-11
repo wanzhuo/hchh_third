@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+    string mes = ViewData["message"].ToString();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>绑定结果</title>
+    <link rel="stylesheet" href="/js/app/ShopWechatOpenOAuth/flexible.css">
+    <script src="/js/app/ShopWechatOpenOAuth/flexible.js"></script>
+    <link rel="stylesheet" href="/js/app/ShopWechatOpenOAuth/style.css">
+</head>
+<body>
+    <div class="warp">
+    @if(mes=="success"){
+        <div class="message-img">
+            <img src="/js/app/ShopWechatOpenOAuth/success.png" alt="">
+        </div>
+        <div class="message">绑定成功</div>
+        <div class="tips">关注"广东惠吃惠喝",马上获取订单推送</div>
+    }else if(mes=="faile"){
+        <div class="message-img">
+            <img src="/js/app/ShopWechatOpenOAuth/error.png" alt="">
+        </div>
+        <div class="message">绑定失败</div>
+        <div class="tips">请重新扫码绑定</div>
+
+    }else{
+         <div class="message-img">
+            <img src="/js/app/ShopWechatOpenOAuth/success.png" alt="">
+        </div>
+        <div class="message">账号已经绑定过了</div>
+        <div class="tips">关注"广东惠吃惠喝",马上获取订单推送</div>
+
+    }
+    </div>
+
+</body>
+</html>

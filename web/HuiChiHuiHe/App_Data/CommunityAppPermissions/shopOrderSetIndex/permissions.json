@@ -1,0 +1,11 @@
+{
+  "Url": "/shoporderset/index",
+  "Sources": [
+    "/api/shopordersetapi/getlist",
+    "/api/shopordersetapi/getorderitems",
+    "/api/shopordersetapi/setisdelete",
+    "/api/shopordersetapi/setstatus",
+    "/api/shopordersetapi/getshopbrands",
+    "/api/shopordersetapi/getshops"
+  ]
+}

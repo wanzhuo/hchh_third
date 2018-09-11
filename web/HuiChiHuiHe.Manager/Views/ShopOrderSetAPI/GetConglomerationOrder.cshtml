@@ -1,0 +1,81 @@
+﻿@model ZRui.Web.Models.ConglomerationOrderListResultModel
+@{
+    Layout = null;
+    int itemsCount = 0;
+    int i = 1;
+
+    if (string.IsNullOrEmpty(Model.AvatarUrl))
+    {
+        Model.AvatarUrl = "/js/app/shopOrderSetAPI/1.jpeg";
+    }
+    if (string.IsNullOrEmpty(Model.NickName))
+    {
+        Model.NickName = "会员" + Model.MemberId;
+    }
+}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/flexible.css">
+    <script src="/js/app/shopOrderSetAPI/flexible.js"></script>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/style.css">
+</head>
+<body>
+    <div class="warp">
+        <div class="banner"></div>
+        <div class="bill">
+            <div class="order-info">
+                <div class="user-logo">
+                    <img src="@Model.AvatarUrl" alt="">
+                </div>
+                <div class="user-name">@Model.NickName</div>
+                <div class="order-desk order-type">
+                    <span>拼团单</span>
+                    <!-- <span>餐饮人数：</span> -->
+                </div> Model.PickupCode
+                @if (string.IsNullOrWhiteSpace(Model.PickupCode))
+                {
+                    <div class="order-num order-type">提货码: @Model.PickupCode</div>
+                }
+                <div class="order-num order-type">订单编号: @Model.OrderNumber</div>
+                <div class="order-time order-type">
+                    支付时间：
+                    <span>@Model.PayTime.Value.ToString("yyyy-MM-dd")</span>
+                    <span>@Model.PayTime.Value.ToString("HH:mm:ss")</span>
+                </div>
+
+                <div class="order-time order-type">
+                    期望自提配送时间
+                    <span>@Model.PickupBeginTime.ToString("yyyy-MM-dd HH:mm") - @Model.PickupEndTimeHM.ToString("yyyy-MM-dd HH:mm")</span>
+                </div>
+
+
+            </div>
+            <div class="bill-table">
+                <ul class="bill-table-header">
+                    <li>活动名称</li>
+                    <li>拼团价格</li>
+                </ul>
+            
+                    
+                    <div class="bill-table-content">
+                        <ul class="list">
+                            <li>@Model.ActivityName</li>
+                            <li>@Model.Amount</li>
+                        </ul>
+                    </div>
+
+               
+                <ul class="discount">
+                    <li>支付方式：微信支付</li>
+                    <!-- <li>银联卡：1</li> -->
+                </ul>
+                <div class="pay">合计实付：<span>@Model.Amount</span></div>
+              
+            </div>
+        </div>
+    </div>
+</body>
+</html>

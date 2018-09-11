@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i>{{shopCommodityStockSet.currentShop.name}} 商品：{{shopCommodityStockSet.current.name}} 详细</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="updateError!=''">
+        <p>
+            <b>更新失败：</b>{{updateError}}
+        </p>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#up" data-toggle="tab">架上</a></li>
+        <li><a href="#down" data-toggle="tab">架下</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="up">
+            <table class="table colResizable">
+                <thead>
+                    <tr>
+                        <th style="width:70px;text-align:center;">序号</th>
+                        <th style="width:150px;">规格名称</th>
+                        <th style="width:70px;">库存</th>
+                        <th style="width:70px;">市场价</th>
+                        <th style="width:70px;">成本价</th>
+                        <th style="width:70px;">销售价</th>
+                        <th style="width:70px;text-align:center;">更新</th>
+                        <th style="width:70px;text-align:center;">下架</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="item in shopCommodityStockSet.currentStocks">
+                    <td style="text-align:center;">{{($index+1)}}</td>
+                    <td><span class="label label-default" ng-repeat="valueItem in item.values" style="margin-right:1em;">{{valueItem}}</span></td>
+                    <td><input class="form-control" ng-model="item.stock" /></td>
+                    <td><input class="form-control" ng-model="item.marketPrice" /></td>
+                    <td><input class="form-control" ng-model="item.costPrice" /></td>
+                    <td><input class="form-control" ng-model="item.salePrice" /></td>
+                    <td style="text-align:center;"><a href="javascript:;" ng-click="shopCommodityStockSet.update(item)"><i class="fa fa-save"></i></a></td>
+                    <td style="text-align:center;"><a href="javascript:;" ng-click="shopCommodityStockSet.setIsDelete(item)"><i class="fa fa-arrow-circle-down"></i></a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane" id="down">
+            <table class="table colResizable">
+                <thead>
+                    <tr>
+                        <th style="width:70px;text-align:center;">序号</th>
+                        <th style="width:150px;">规格名称</th>
+                        <th style="width:70px;text-align:center;">上架</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="item in shopCommodityStockSet.skus | filter:removeUpSkuFilter">
+                    <td style="text-align:center;">{{($index+1)}}</td>
+                    <td><span class="label label-default" ng-repeat="valueItem in item.values" style="margin-right:1em;">{{valueItem}}</span></td>
+                    <td style="text-align:center;"><a href="javascript:;" ng-click="shopCommodityStockSet.add(item.id)" ><i class="fa fa-arrow-circle-up"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+<!-- /.box-body -->

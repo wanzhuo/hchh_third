@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Version>2.1.6.3345</Version>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZRui.Web.Core.Finance.PayBase\ZRui.Web.Core.Finance.PayBase.csproj" />
+    <ProjectReference Include="..\ZRui.Web.Shop.BLL\ZRui.Web.BLL.csproj" />
+  </ItemGroup>
+</Project>

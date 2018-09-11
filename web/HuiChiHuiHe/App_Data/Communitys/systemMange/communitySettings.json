@@ -1,0 +1,54 @@
+{
+  "Creator": null,
+  "CreateTime": "0001-01-01T00:00:00",
+  "CreateIp": null,
+  "Members": [
+    {
+      "Username": "member1",
+      "Nickname": null,
+      "AddTime": "0001-01-01T00:00:00"
+    },
+    {
+      "Username": "member2",
+      "Nickname": "member2",
+      "AddTime": "2016-09-11T20:33:36.7252513+08:00"
+    }
+  ],
+  "Apps": [
+    {
+      "Flag": "memberset",
+      "Name": "人员管理",
+      "Price": 0.0,
+      "Url": "/memberset/index",
+      "AppSettings": null,
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "communityset",
+      "Name": "群组管理",
+      "Price": 0.0,
+      "Url": "/communityset/index",
+      "AppSettings": null,
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "zhkze8w3",
+      "Name": "API接口文档",
+      "Price": 0.0,
+      "Url": "/swagger",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    }
+  ],
+  "Managers": [
+    "member1"
+  ],
+  "IsDel": false,
+  "Flag": "systemMange",
+  "Name": "系统管理"
+}

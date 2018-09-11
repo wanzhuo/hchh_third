@@ -1,0 +1,60 @@
+﻿@model ZRui.Web.ArticleSetModels.OpenModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "articleSetOpenTxtController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+
+<section class="content-header" ng-init="init('@(Model.CommunityFlag)','@(Model.AppFlag)',@(Model.Id))"></section>
+<section class="content  id=" body"" ng-cloak>
+    <textarea id="initContent" style="display:none;" ng-model="current.content"></textarea>
+    <div style="position:fixed; right:15px; top:15px; ">
+        <div><a class="btn" onclick="javascript:exportPdf()"><span class="fa fa-file-pdf-o"></span></a></div>
+        <div><a class="btn" href="javascript:;" ng-click="openHistory()"><i class="fa fa-history"></i></a></div>
+        <div><a class="btn" href="javascript:;" title="保存" ng-click="save()"><i class="fa fa-save"></i></a></div>
+    </div>
+
+    <textarea id="editPanel" ng-model="current.content" style="width:100%;height:100%;" ng-keyup="recordCaretPos()" ng-mouseup="recordCaretPos()"></textarea>
+</section>
+
+@section detailView{
+}
+@section scripts{
+    <script src="/lib/jsPDF/dist/jspdf.min.js"></script>
+    <script src="/lib/paste.js"></script>
+    <script type="text/javascript">
+        window.abc = {};
+        window.abc.openPage = parent.openPage;
+        function exportPdf() {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            var canvas = pdf.canvas;
+            var width = 600;
+            //canvas.width=8.5*72;
+            document.body.style.width = width + "px";
+
+            html2canvas(document.getElementById("showPanel"), {
+                canvas: canvas,
+                onrendered: function (canvas) {
+                    pdf.save('下载.pdf')
+                }
+            });
+        }
+
+
+        $(function () {
+            textarea_onresize();
+            window.onresize = textarea_onresize;
+        })
+
+        function textarea_onresize() {
+            //var h = $('body').height() - 20;
+            var h = $(window).height() - 50;
+            $('textarea').css('height', h + 'px');
+        }
+    </script>
+
+    <script src="/js/app/ArticleSet/opentxt.js"></script>
+}
+
+@section head{
+}

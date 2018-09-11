@@ -1,0 +1,149 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "articleSetIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            文章管理
+            <small>CommunityFlag:@Model.CommunityFlag AppFlag:@Model.AppFlag</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            @*<li><a href="#">Examples</a></li>*@
+            <li class="active">文章</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                @{await Html.RenderPartialAsync("_index_category");}
+            </div>
+            <div class="col-md-9">
+                @{await Html.RenderPartialAsync("_index_main");}
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</section>
+
+<script type="text/ng-template" id="nodes_moveto_category_renderer.html">
+    <div style="line-height:35px;">
+        <a class="btn btn-link" ng-click="moveToCategory(node)">{{node.title}}</a>
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_moveto_category_renderer.html'">
+        </li>
+    </ol>
+</script>
+
+<script type="text/ng-template" id="dialog_moveto_categorg">
+    <div ui-tree data-drag-enabled="true" data-max-depth="5" data-drag-delay="500">
+        <ol ui-tree-nodes="" ng-model="categorys" id="tree-root">
+            <li ng-repeat="node in categorys" ui-tree-node ng-include="'nodes_moveto_category_renderer.html'"></li>
+        </ol>
+    </div>
+</script>
+
+<script type="text/ng-template" id="nodes_change_category_parent_renderer.html">
+    <div style="line-height:35px;">
+        <a class="btn btn-link" ng-click="changeCategoryParent(node)">{{node.title}}</a>
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_change_category_parent_renderer.html'">
+        </li>
+    </ol>
+</script>
+
+<script type="text/ng-template" id="dialog_change_category_parent">
+    <div ui-tree data-drag-enabled="true">
+        <div style="line-height:35px;">
+            <a class="btn btn-link" ng-click="changeCategoryParent({name:'根',id:null})">根</a>
+        </div>
+        <ol ui-tree-nodes="" ng-model="categorys" id="tree-root1" style="margin-left:1em;">
+            <li ng-repeat="node in categorys" ui-tree-node ng-include="'nodes_change_category_parent_renderer.html'"></li>
+        </ol>
+    </div>
+</script>
+
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        @{await Html.RenderPartialAsync("_detail_add");}
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'">
+        @{await Html.RenderPartialAsync("_detail_edit");}
+    </div>
+
+<div class="box box-primary" ng-show="viewName=='editScheduled'">
+    @{await Html.RenderPartialAsync("_detail_edit_scheduled");}
+</div>
+
+    <div class="box box-primary" ng-show="viewName=='editCategory'">
+        @{await Html.RenderPartialAsync("_detail_edit_category");}
+    </div>
+}
+@section scripts{
+    <script src="~/lib/json2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/lib/ueditor/ueditor.config.js?v1.1"></script>
+    <script type="text/javascript" charset="utf-8" src="/lib/ueditor/ueditor.all.min.js"> </script>
+    <script src="/lib/ajaxfileupload.js"></script>
+    <script src="/js/app/ArticleSet/index.js"></script>
+}
+
+@section head{
+    <style>
+        .imageitem {
+            padding: 5px;
+            margin: 5px;
+            border: 2px solid #f0f0f0;
+        }
+
+            .imageitem .topinfo {
+                position: absolute;
+                width: 200px;
+                color: #fff;
+                text-align: center;
+                background-color: #000000; /* IE6和部分IE7内核的浏览器(如QQ浏览器)下颜色被覆盖 */
+                background-color: rgba(0,0,0,0.2); /* IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂，但解析为透明 */
+            }
+
+                .imageitem .topinfo a {
+                    color: #fff;
+                }
+
+            .imageitem img {
+                width: 200px;
+                height: 200px;
+                border: solid 1px #c0c0c0;
+            }
+
+            .imageitem .cover {
+                position: absolute;
+                height: 200px;
+                width: 200px;
+                color: #808080;
+                font-size: 24px;
+                line-height: 200px;
+                text-align: center;
+                text-shadow: 5px 2px 6px #000;
+            }
+
+            .imageitem .info {
+                padding: 8px;
+            }
+
+            .imageitem .rate button {
+                width: 75px;
+            }
+
+        .imageitemSelected {
+            border: 2px solid darkblue;
+        }
+    </style>
+}

@@ -1,0 +1,12 @@
+{
+  "Url": "/shopcallingqueueset/index",
+  "Sources": [
+    "/api/shopcallingqueuesetapi/getlist",
+    "/api/shopcallingqueuesetapi/setisdelete",
+    "/api/shopcallingqueuesetapi/setstatus",
+    "/api/shopcallingqueuesetapi/setisused",
+    "/api/shopcallingqueuesetapi/setqueueindex",
+    "/api/shopcallingqueuesetapi/getshopbrands",
+    "/api/shopcallingqueuesetapi/getshops"
+  ]
+}

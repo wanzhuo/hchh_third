@@ -1,0 +1,7 @@
+{
+  "Url": "/communityset/appsetting",
+  "Sources": [
+    "/api/CommunitySetAPI/GetAppSettings",
+    "/api/CommunitySetAPI/SetAppSettings"
+  ]
+}

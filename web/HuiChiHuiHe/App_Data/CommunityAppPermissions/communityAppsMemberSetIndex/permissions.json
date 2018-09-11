@@ -1,0 +1,10 @@
+{
+  "Url": "/community/apps/memberset/index",
+  "Sources": [
+    "/api/membersetapi/getpagedlist",
+    "/api/membersetapi/add",
+    "/api/membersetapi/update",
+    "/api/membersetapi/resetpassword",
+    "/api/membersetapi/setisdelete"
+  ]
+}

@@ -1,0 +1,74 @@
+﻿@model ZRui.Web.ArticleModels.DetailModel
+@{
+    ViewData["Title"] = Model.Article.Title;
+    ViewData["Keywords"] = Model.Article.Keywords;
+    ViewData["Description"] = Model.Article.Description;
+}
+<div class="row z-detail" style="padding-top:8px;">
+
+<div class="col-md-9" id="articlebody">
+<h2 style="text-align:center;">@Model.Article.Title</h2>
+@Html.Raw(Model.GetHtmlContent())
+@foreach (var item in Model.Extends)
+{
+var xx = new { communityFlag = "", appFlag = "", flag = "" };
+var paramObj = Newtonsoft.Json.JsonConvert.DeserializeAnonymousType(item.ParamsString, xx);
+@await Component.InvokeAsync(item.ComponentName, paramObj)
+}
+</div>
+<div class="col-md-3">
+<div class="box box-primary">
+<div class="box-body box-profile">
+<ul class="list-group list-group-unbordered">
+@await Component.InvokeAsync("PartialArticleCategoryList", new { viewName = "list-group-item", CommunityFlag = Model.CommunityFlag, AppFlag = Model.AppFlag, parentFlag = "article" })
+</ul>
+    
+<hr />
+@if (Model.ArticleCategory != null)
+{
+<h4 style="text-align:center;">《@Model.ArticleCategory.Name》目录</h4>
+@await Component.InvokeAsync("PartialArticleList", new { viewName = "subject",CommunityFlag = Model.CommunityFlag, AppFlag = Model.AppFlag, categoryFlag = Model.ArticleCategory.Flag});
+}
+</div>
+
+<!-- /.box-body -->
+</div>
+<div id="pin" class="visible-lg-block">
+    <div class="pinned">
+        <div id="toc"></div>
+    </div>
+</div>
+    
+</div>
+</div>
+
+@section head{ 
+    <link href="~/lib/jquery.tocify/src/stylesheets/jquery.tocify.css" rel="stylesheet" />
+    <style>
+        .tocify {
+            position:initial;
+            width:100%;
+            margin-left:unset;
+        }
+        .active > a {
+            background-color: #0088cc;
+            color:#fff;
+        }
+    </style>
+}
+
+@section scripts{ 
+    <script src="~/lib/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="/lib/jquery.tocify/src/javascripts/jquery.tocify.min.js"></script>
+    <script src="~/lib/jquery.pin/jquery.pin.min.js"></script>
+    <script>
+        $(function () {
+            //Calls the tocify method on your HTML div.
+            $("#toc").tocify({ context: "#articlebody", selectors: "h2,h3,h4" });
+            $("#pin").height($("#articlebody").height() - $("#pin").offset().top);
+            $(".pinned").pin({
+                containerSelector: "#pin"
+            });
+        });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@{ Layout = null; }
+<!-- Default box -->
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">消息列表</h3>
+        <a class="btn btn-link btn-sm" ng-click="downloadMsgs()"><i class="fa fa-refresh"></i></a>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <table class="table colResizable">
+            <thead>
+                <tr>
+                    <th style="width:70px;text-align:center;">序号</th>
+                    <th>openId</th>
+                    <th>operCode</th>
+                    <th>text</th>
+                    <th>dateTime</th>
+                    <th>worker</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="item in msgItems">
+                <td style="text-align:center;">{{item.id}}</td>
+                <td><a href="javascript:;" ng-click="initSend(item.openId)">{{item.openId}}</a></td>
+                <td>{{item.operCode}}</td>
+                <td>{{item.text}}</td>
+                <td>{{item.dateTime}}</td>
+                <td>{{item.worker}}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+    </div>
+</div>
+<!-- /.box -->

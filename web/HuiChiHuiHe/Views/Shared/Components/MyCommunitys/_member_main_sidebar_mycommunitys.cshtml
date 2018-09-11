@@ -1,0 +1,27 @@
+﻿@model IList<Community>
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-th"></i>
+            <span>@item.Name</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            <i class="fa fa-angle-down pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            @foreach (var app in @item.Apps.Where(m => !m.IsDisabled))
+            {
+                var url = app.Url + "?communityFlag=" + item.Flag + "&appFlag=" + app.Flag;
+                @*<li><a href="@(url)"><i class="fa fa-circle-o"></i>@app.Name</a></li>*@
+                <li><a href="javascript:;" ng-click="openPage('@url','@app.Name','@url')" class="@(app.IsDefaultOpen?"defaultOpen":"")"><i class="fa fa-circle-o"></i>@app.Name</a></li>
+            }
+            @*<li><a href="javascript:;" ng-click="openPage('/community/detail?communityFlag=@item.Flag','@(item.Name)设置','/community/detail?communityFlag=@item.Flag')"><i class="fa fa-circle-o"></i>@(item.Name)设置</a></li>*@
+        </ul>
+    </li>
+}
+
+

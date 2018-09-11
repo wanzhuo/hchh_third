@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> {{shopBrandCommodityCategorySet.current.name}} 详细</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="updateError!=''">
+        <p>
+            <b>更新失败：</b>{{updateError}}
+        </p>
+    </div>
+    <div class="form-group">
+        <label>上级类别</label>
+        <div>
+            <span ng-if="shopBrandCommodityCategorySet.current.pId">{{shopBrandCommodityCategorySet.current.parentName}}  </span>
+            <span ng-if="!shopBrandCommodityCategorySet.current.pId">根  </span>
+            <a class="btn btn-link" ng-click="showChangeCategoryParentDialog('dialog_change_category_parent')">重新选择</a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>类别名称</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.name" type="text" />
+    </div>
+    <div class="form-group">
+        <label>标识</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.flag" type="text" />
+    </div>
+    <div class="form-group">
+        <label>排序权重</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.orderWeight" type="text" />
+    </div>
+    <div class="form-group">
+        <label>说明</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.detail" type="text" />
+    </div>
+    <div class="form-group">
+        <label>图片</label>
+        <div class="input-group input-group-sm">
+            <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.ico" type="text" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-info btn-flat" onclick="javascript:document.getElementById('fileCategory').click();">上传</button>
+                <input type="file" style="display:none"
+                       id="fileCategory" name='image' onchange="angular.element(this).scope().fileNameChangedForCategory(this, angular.element(this).scope().shopBrandCommodityCategorySet.current,'ico')" />
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>标签（使用逗号分隔）</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.tags" type="text" />
+    </div>
+    <div class="form-group">
+        <label>keywords</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.keywords" type="text" />
+    </div>
+    <div class="form-group">
+        <label>description</label>
+        <input class="form-control" ng-model="shopBrandCommodityCategorySet.current.description" type="text" />
+    </div>
+</div>
+<div class="box-footer">
+    <button class="btn btn-primary" ng-click="shopBrandCommodityCategorySet.update()">保存</button>
+</div>

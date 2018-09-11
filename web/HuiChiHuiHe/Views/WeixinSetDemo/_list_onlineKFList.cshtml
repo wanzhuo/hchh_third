@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+
+<!-- Default box -->
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">在线客服列表</h3>
+        <a class="btn btn-link btn-sm" ng-click="getOnlineKFList()"><i class="fa fa-refresh"></i></a>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <table class="table colResizable">
+            <thead>
+                <tr>
+                    <th style="width:70px;text-align:center;">序号</th>
+                    <th>kf_account</th>
+                    <th>status</th>
+                    <th>kf_id</th>
+                    <th>auto_accept</th>
+                    <th>accepted_case</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="item in onlineKFList">
+                <td style="text-align:center;">{{$index+1}}</td>
+                <td>{{item.kf_account}}</td>
+                <td>{{item.status}}</td>
+                <td>{{item.kf_id}}</td>
+                <td>{{item.auto_accept}}</td>
+                <td>{{item.accepted_case}}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+    </div>
+</div>
+<!-- /.box -->

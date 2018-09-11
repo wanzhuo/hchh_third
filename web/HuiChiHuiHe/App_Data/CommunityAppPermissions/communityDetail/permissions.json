@@ -1,0 +1,17 @@
+{
+  "Url": "/community/detail",
+  "Sources": [
+    "/api/CommunityAPI/GetList",
+    "/api/CommunityAPI/GetSingle",
+    "/api/CommunityAPI/GetMembers",
+    "/api/CommunityAPI/AddMember",
+    "/api/CommunityAPI/AddManager",
+    "/api/CommunityAPI/RemoveMember",
+    "/api/CommunityAPI/RemoveManager",
+    "/api/CommunityAPI/SetCommunityName",
+    "/api/CommunityAPI/SetAppName",
+    "/api/CommunityAPI/SetAppIsDisabled",
+    "/api/CommunityAPI/GetAppSettings",
+    "/api/CommunityAPI/SetAppSettings"
+  ]
+}

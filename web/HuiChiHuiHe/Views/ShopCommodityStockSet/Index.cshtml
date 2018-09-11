@@ -1,0 +1,151 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "商铺商品管理";
+    ViewBag.ngController = "shopCommodityStockSetIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            商品管理
+            <small></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">商品</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">商铺品牌</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table colResizable">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;text-align:center;">序号</th>
+                                    <th style="width:350px;">标题</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align:center;">---</td>
+                                <td><input type="text" class="form-control input-sm" ng-model="shopCommodityStockSet.searchShopBrandsModel.name" ng-change="load()" /></td>
+                            </tr>
+                            <tr ng-repeat="item in shopCommodityStockSet.shopBrands">
+                                <td style="text-align:center;">{{item.id}}</td>
+                                <td><a href="javascript:;" ng-click="selectShopBrand(item)">{{item.name}}</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><span ng-if="shopCommodityStockSet.currentShopBrand!=null">{{shopCommodityStockSet.currentShopBrand.name}}</span>商铺</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table colResizable">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;text-align:center;">序号</th>
+                                    <th style="width:350px;">标题</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align:center;">---</td>
+                                <td><input type="text" class="form-control input-sm" ng-model="shopCommodityStockSet.searchShopBrandsModel.name" ng-change="load()" /></td>
+                            </tr>
+                            <tr ng-repeat="item in shopCommodityStockSet.shops">
+                                <td style="text-align:center;">{{item.id}}</td>
+                                <td><a href="javascript:;" ng-click="selectShop(item)">{{item.name}}</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><span ng-if="shopCommodityStockSet.currentShop!=null">{{shopCommodityStockSet.currentShop.name}}</span>商品列表</h3>
+                        <div class="box-tools pull-right">
+                            <input type="text" class="form-control pull-right" ng-change="shopCommodityStockSet.load()" placeholder="行数" ng-model="shopCommodityStockSet.pageSize" title="行数" style="width:45px;">
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table colResizable">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;text-align:center;">序号</th>
+                                    <th style="width:250px;">名称</th>
+                                    <th style="width:70px;">市场价</th>
+                                    <th style="width:70px;">月销量</th>
+                                    <th style="width:70px;">点赞数</th>
+                                    <th style="width:100px;">是否推荐</th>
+
+                                    <th style="width:70px;text-align:center;">删除</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align:center;">---</td>
+                                <td><input type="text" class="form-control input-sm" ng-model="shopCommodityStockSet.searchModel.name" ng-change="load()" /></td>
+                                <td style="text-align:center;">---</td>
+                                <td style="text-align:center;">---</td>
+                                <td style="text-align:center;">---</td>
+                                <td style="text-align:center;">---</td>
+
+                                <td style="text-align:center;">---</td>
+                            </tr>
+                            <tr ng-repeat="item in shopCommodityStockSet.items">
+                                <td style="text-align:center;">{{shopCommodityStockSet.pageSize*(shopCommodityStockSet.pageIndex-1) + ($index+1)}}</td>
+                                <td><a href="javascript:;" ng-click="edit(item)">{{item.name}}</a></td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.salesForMonth}}</td>
+                                <td>{{item.upvote}}</td>
+                                <td>{{item.isRecommand}}</td>
+
+                                <td style="text-align:center;"><a href="javascript:;" data-fn-delete="shopCommodityStockSet.setIsDelete(item)" delete-confirm="确定移除'{{item.name}}'?"><i class="fa fa-remove"></i></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <ul ng-show="shopCommodityStockSet.totalCount>shopCommodityStockSet.pageSize" uib-pagination total-items="shopCommodityStockSet.totalCount" items-per-page="pageSize" ng-model="shopCommodityStockSet.pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="shopCommodityStockSet.load()"></ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box -->
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+</section>
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        @{await Html.RenderPartialAsync("_detail_add");}
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'">
+        @{await Html.RenderPartialAsync("_detail_edit");}
+    </div>
+}
+@section scripts{
+    <script src="~/js/app/shopCommodityStockSet/index.js"></script>
+}
+
+@section head{
+
+}

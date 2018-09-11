@@ -1,0 +1,88 @@
+﻿@{ Layout = null; }
+
+<div class="box box-success" ng-show="viewName=='editCustomerSession'">
+    <div class="box-header box-header-me with-border">
+
+        <h3 class="box-title"><i class="fa fa-user" ng-dblclick="viewName = 'index'"></i> 客户：{{currentCustomerSession.openId}}</h3>
+
+        <div class="box-tools pull-left">
+            <a class="btn btn-link btn-sm" ng-click="getCustomerMessageList()"><i class="fa fa-refresh"></i></a>
+            <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+        </div>
+        <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+        <div ng-if="currentCustomerSession.status==0">
+            <div class="form-group">
+                <label>最后时间</label>
+                <div class="form-control">{{currentCustomerSession.time}}</div>
+            </div>
+            <div class="form-group">
+                <label>状态</label>
+                <div class="form-control">{{currentCustomerSession.status | customerSessionStatus}}</div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" ng-click="connectCustomerSession()">接入</button>
+            </div>
+        </div>
+
+        <div ng-if="currentCustomerSession.status==2000">
+            <div class="direct-chat direct-chat-danger">
+                <!-- /.box-header -->
+                <!-- Conversations are loaded here -->
+                <div class="direct-chat-messages">
+                    <!-- Message. Default to the left -->
+                    <div ng-repeat="item in currentCustomerSession.messageItems">
+                        <div class="direct-chat-msg" ng-if="item.fromUser!='我'">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-left">{{item.fromUser}}</span>
+                                <span class="direct-chat-timestamp pull-right">{{item.time}}</span>
+                            </div>
+                            <!-- /.direct-chat-info -->
+                            <img class="direct-chat-img" src="/lib/adminlte/dist/img/user1-128x128.jpg" alt="Message User Image">
+                            <!-- /.direct-chat-img -->
+                            <div class="direct-chat-text">
+                                {{item.content}}
+                            </div>
+                            <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+
+                        <!-- Message to the right -->
+                        <div class="direct-chat-msg right" ng-if="item.fromUser=='我'">
+                            <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-right">{{item.fromUser}}</span>
+                                <span class="direct-chat-timestamp pull-left">{{item.time}}</span>
+                            </div>
+                            <!-- /.direct-chat-info -->
+                            <img class="direct-chat-img" src="/lib/adminlte/dist/img/user3-128x128.jpg" alt="Message User Image">
+                            <!-- /.direct-chat-img -->
+                            <div class="direct-chat-text">
+                                {{item.content}}
+                            </div>
+                            <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+                    </div>
+                </div>
+                <!--/.direct-chat-messages-->
+
+                <div class="input-group">
+                    <input type="text" name="message" ng-model="sendCustomerTextModel.text" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-btn">
+                        <button type="button" ng-click="sendCustomerText()" class="btn btn-danger btn-flat">Send</button>
+                      </span>
+                </div>
+
+                <!-- Contacts are loaded here -->
+                <!-- /.direct-chat-pane -->
+
+            </div>
+        </div>
+
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.updateKFAccount -->

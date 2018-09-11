@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">类别</h3>
+        <a class="btn btn-link btn-sm" ng-click="addCategory()" ng-show="isEditCategory"><i class="fa fa-plus"></i></a>
+        <div class="box-tools pull-right">
+            <a class="btn btn-link btn-sm" ng-click="isEditCategory=true" ng-show="!isEditCategory"><i class="fa fa-square-o"></i> 编辑</a>
+            <a class="btn btn-link btn-sm" ng-click="isEditCategory=false" ng-show="isEditCategory"><i class="fa fa-square"></i> 取消编辑</a>
+        </div>
+    </div>
+    <div class="box-body">
+        <!-- Nested node template -->
+        <script type="text/ng-template" id="nodes_renderer.html">
+            <div style="line-height:35px;">
+                <a class="btn btn-link btn-xs" ng-if="node.nodes &amp;&amp; node.nodes.length > 0" data-nodrag="" ng-click="toggle(this)">
+                    <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span>
+                </a>
+                <span class="btn btn-link btn-xs" ng-if="node.nodes &amp;&amp; node.nodes.length <= 0">
+                    <span class="glyphicon glyphicon-folder-close"></span>
+                </span>
+                <a class="btn btn-link" ng-click="selectCategory(node)">{{node.title}}</a>
+                <a ng-show="isEditCategory" class="btn btn-link pull-right" href="javascript:;" data-fn-delete="setIsDeleteCategory(node)" delete-confirm="确定移除'{{node.title}}'?"><i class="fa fa-remove"></i></a>
+                <a ng-show="isEditCategory" class="btn btn-link pull-right" ng-click="editCategory(node)"><i class="fa fa-edit"></i></a>
+                <a ng-show="isEditCategory" class="btn btn-link pull-right" ng-click="addCategory(node)"><i class="fa fa-plus"></i></a>
+            </div>
+            <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                <li ng-repeat="node in node.nodes" data-collapsed="!isEditCategory" ui-tree-node ng-include="'nodes_renderer.html'">
+                </li>
+            </ol>
+        </script>
+        <div ui-tree="treeOptions" data-drag-enabled="true" data-max-depth="5">
+            <ol ui-tree-nodes="" ng-model="categorys" id="tree-root">
+                <li ng-repeat="node in categorys" data-collapsed="!isEditCategory" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+            </ol>
+        </div>
+
+    </div>
+</div>

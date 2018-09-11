@@ -1,0 +1,109 @@
+﻿@model ZRui.Web.ConglomerationOrderListResultModel
+@{
+    Layout = null;
+    int itemsCount = 0;
+    int i = 1;
+
+    if (string.IsNullOrEmpty(Model.AvatarUrl))
+    {
+        Model.AvatarUrl = "/js/app/shopOrderSetAPI/1.jpeg";
+    }
+    if (string.IsNullOrEmpty(Model.NickName))
+    {
+        Model.NickName = "会员" + Model.MemberId;
+    }
+}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/flexible.css">
+    <script src="/js/app/shopOrderSetAPI/flexible.js"></script>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/style.css">
+</head>
+<body>
+    <div class="warp">
+        <div class="banner"></div>
+        <div class="bill">
+            <div class="order-info">
+                <div class="user-logo">
+                    <img src="@Model.AvatarUrl" alt="">
+                </div>
+                <div class="user-name">@Model.NickName</div>
+                <div class="order-desk order-type">
+                    <span>拼团单</span>
+                    <!-- <span>餐饮人数：</span> -->
+                </div>
+
+                <div class="order-num order-type">订单编号: @Model.OrderNumber</div>
+                <div class="order-time order-type">
+                    支付时间：
+                    @if (Model.PayTime.HasValue)
+                    {
+                        <span>@Model.PayTime.Value.ToString("yyyy-MM-dd")</span>
+                        <span>@Model.PayTime.Value.ToString("HH:mm:ss")</span>
+                    }
+                    else
+                    {
+                        <span>未支付</span>
+                    }
+
+                </div>
+                <div class="order-time order-type">
+                    配送方式 <span>@Model.Type.ToString()</span>
+                </div>
+                <div class="order-time order-type">
+                    @if (Model.Type == ConsignmentType.快递)
+                    {
+
+                        @:期望配送时间
+                        <span>@Model.Delivery.ToString("yyyy-MM-dd HH:mm")</span>
+
+                    }
+                    else
+                    {
+                        @:自提时间
+                        <span>@Model.Deliverys</span>
+
+                    }
+                </div>
+
+
+            </div>
+            <div class="bill-table">
+                <ul class="bill-table-header">
+                    <li>活动名称</li>
+                    <li>拼团价格</li>
+                    <li>其他费用</li>
+                    <li>配送方式</li>
+                </ul>
+
+
+                <div class="bill-table-content">
+                    <ul class="list">
+                        <li>@Model.ActivityName</li>
+                        <li>@(Model.Amount / 100.00M)</li>
+                        <li>@((Model.Amount - Model.Payment) / 100.00M)</li>
+                        <li>@Model.Type.ToString()</li>
+                    </ul>
+                </div>
+
+            </div>
+            <ul class="discount">
+                <li>支付方式：@Model.PayWay</li>
+                @if (Model.ConglomerationExpress != null)
+                {
+                    <li>收件人姓名：@Model.ConglomerationExpress.Name</li>
+                    <li>收件人电话：@Model.ConglomerationExpress.Phone</li>
+                    <li>收件人性别：@Model.ConglomerationExpress.Sex</li>
+                    <li>收件地址：@Model.ConglomerationExpress.Address</li>
+                }
+
+                <!-- <li>银联卡：1</li> -->
+            </ul>
+            <div class="pay">合计实付：<span>@(Model.Payment / 100.00M)</span></div>
+        </div>
+    </div>
+</body>
+</html>

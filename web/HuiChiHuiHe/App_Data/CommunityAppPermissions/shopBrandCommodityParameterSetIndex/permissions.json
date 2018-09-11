@@ -1,0 +1,14 @@
+{
+  "Url": "/shopbrandcommodityparameterset/index",
+  "Sources": [
+    "/api/shopbrandcommodityparametersetapi/getpagedlist",
+    "/api/shopbrandcommodityparametersetapi/add",
+    "/api/shopbrandcommodityparametersetapi/update",
+    "/api/shopbrandcommodityparametersetapi/setisdelete",
+    "/api/shopbrandcommodityparametersetapi/getshopbrands",
+
+    "/api/shopbrandcommodityparametervaluesetapi/getlist",
+    "/api/shopbrandcommodityparametervaluesetapi/add",
+    "/api/shopbrandcommodityparametervaluesetapi/setisdelete"
+  ]
+}

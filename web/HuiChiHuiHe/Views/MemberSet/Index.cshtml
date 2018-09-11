@@ -1,0 +1,158 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "memberSetIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            人员管理
+            <small>管理系统的使用人员</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            @*<li><a href="#">Examples</a></li>*@
+            <li class="active">产品</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">人员列表</h3>
+                <a class="btn btn-link btn-sm" ng-click="initAdd()"><i class="fa fa-plus"></i></a>
+                <div class="box-tools pull-right">
+                    <input type="text" class="form-control pull-right" ng-change="load()" placeholder="行数" ng-model="pageSize" title="行数" style="width:45px;">
+                </div>
+            </div>
+            <div class="box-body table-responsive no-padding">
+                <table class="table colResizable">
+                    <thead>
+                        <tr>
+                            <th style="width:70px;text-align:center;">序号</th>
+                            <th style="width:250px;">邮箱地址</th>
+                            <th style="width:100px;">真实姓名</th>
+                            <th style="width:100px;">状态</th>
+
+                            <th style="width:70px;text-align:center;">删除</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align:center;">---</td>
+                        <td><input type="text" class="form-control input-sm" ng-model="searchModel.email" ng-change="load()" /></td>
+                        <td><input type="text" class="form-control input-sm" ng-model="searchModel.truename" ng-change="load()" /></td>
+                        <td style="text-align:center;">
+                            <select class="form-control input-sm" ng-model="searchModel.status" ng-options="item.value as item.name  for item in searchStatusList" ng-change="load()"></select>
+                        </td>
+
+                        <td style="text-align:center;">---</td>
+                    </tr>
+                    <tr ng-repeat="item in items">
+                        <td style="text-align:center;">{{pageSize*(pageIndex-1) + ($index+1)}}</td>
+                        <td><a href="javascript:;" ng-click="edit(item)">{{item.email}}</a></td>
+                        <td>{{item.truename}}</td>
+                        <td>{{item.status | memberStatus}}</td>
+
+                        <td style="text-align:center;"><a href="javascript:;" data-fn-delete="setIsDelete(item)" delete-confirm="确定移除'{{item.truename}}'?"><i class="fa fa-remove"></i></a></td>
+                        @*<td style="text-align:center;"><a href="javascript:;" ng-click="setIsDelete(item)"><i class="fa fa-remove"></i></a></td>*@
+                    </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <ul ng-show="totalCount>pageSize" uib-pagination total-items="totalCount" items-per-page="pageSize" ng-model="pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="load()"></ul>
+            </div>
+        </div>
+        <!-- /.box -->
+
+
+
+    </section>
+    <!-- /.content -->
+</section>
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-plus" ng-dblclick="viewName = 'index'"></i> 添加</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="addError!=''">
+                <p>
+                    <b>添加失败：</b>{{addError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>邮箱地址（登陆名）</label>
+                <input class="form-control" ng-model="newModel.email" type="email" />
+            </div>
+            <div class="form-group">
+                <label>真实姓名</label>
+                <input class="form-control" ng-model="newModel.truename" type="text" />
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input class="form-control" ng-model="newModel.password" type="text" />
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="add()">确定添加</button>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> member{{current.id}} 详细</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="updateError!=''">
+                <p>
+                    <b>更新失败：</b>{{updateError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>邮箱地址（登陆名）</label>
+                <input class="form-control" ng-model="current.email" type="email" />
+            </div>
+            <div class="form-group">
+                <label>真实姓名</label>
+                <input class="form-control" ng-model="current.truename" type="text" />
+            </div>
+            <div class="form-group">
+                <label>状态</label>
+                <select class="form-control" ng-model="current.status" ng-options="item.value as item.name  for item in statusList"></select>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="update()">保存</button>
+            <button class="btn btn-warning" ng-click="resetPassword()">重置密码</button>
+            <span>{{current.newPassword}}</span>
+        </div>
+        <!-- /.box-body -->
+    </div>
+}
+@section scripts{
+    <script src="~/js/app/memberSet/index.js"></script>
+}
+
+@section head{
+
+}

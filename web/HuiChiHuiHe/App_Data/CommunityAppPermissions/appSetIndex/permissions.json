@@ -1,0 +1,9 @@
+{
+  "Url": "/appset/index",
+  "Sources": [
+    "/api/appsetapi/getlist",
+    "/api/appsetapi/add",
+    "/api/appsetapi/update",
+    "/api/appsetapi/restart"
+  ]
+}

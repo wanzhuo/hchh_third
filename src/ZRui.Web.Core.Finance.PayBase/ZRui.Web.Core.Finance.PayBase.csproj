@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Version>0.0.2.0060</Version>
+    <Authors>BenWen</Authors>
+    <Company>BenWen</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZRui.Web.Core.Finance" Version="0.1.5.45" />
+    <PackageReference Include="ZRui.Web.Core.Wechat" Version="1.2.22.4460" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZRui.Web.Shop.BLL\ZRui.Web.BLL.csproj" />
+  </ItemGroup>
+
+</Project>

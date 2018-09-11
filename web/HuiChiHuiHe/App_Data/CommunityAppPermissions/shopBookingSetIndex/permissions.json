@@ -1,0 +1,12 @@
+{
+  "Url": "/shopbookingset/index",
+  "Sources": [
+    "/api/shopbookingsetapi/getlist",
+    "/api/shopbookingsetapi/setisdelete",
+    "/api/shopbookingsetapi/setstatus",
+    "/api/shopbookingsetapi/setisused",
+    "/api/shopbookingsetapi/setqueueindex",
+    "/api/shopbookingsetapi/getshopbrands",
+    "/api/shopbookingsetapi/getshops"
+  ]
+}

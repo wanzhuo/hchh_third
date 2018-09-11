@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@Html.Raw(ViewData["Title"]) - CSCODER.CN</title>
+<meta name="keywords" content="@Html.Raw(ViewData["Keywords"])" />
+<meta name="description" content="@Html.Raw(ViewData["Description"])" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+<link href="/lib/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/site.css?v=1.0" />
+@RenderSection("head", required: false)
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="container">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a href="/" class="navbar-brand">CSCODER.CN</a>
+</div>
+<div class="navbar-collapse collapse">
+<ul class="nav navbar-nav">
+<li><a href="/">首页</a></li>
+@*<li><a href="/document.html">文档</a></li>*@
+<li><a href="/tools.html">工具</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="container body-content">
+@RenderBody()
+<hr />
+<footer>
+<p>&copy; 2017 - CSCODER.CN <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">粤ICP备10217501号-4</a></p>
+</footer>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@RenderSection("scripts", required: false)
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?755f2cfd0f13d9141cac9341662c206d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+﻿@model ZRui.Web.ArticleSetModels.OpenModel
+@{
+    ViewBag.Title = "Detail";
+    ViewBag.ngController = "articleSetOpenMarkdownController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+
+<section class="content-header" ng-init="init('@(Model.CommunityFlag)','@(Model.AppFlag)',@(Model.Id))"></section>
+<section class="content  id=" body"" ng-cloak>
+    <textarea id="initContent" style="display:none;" ng-model="current.content"></textarea>
+    <div style="position:fixed; right:15px; top:15px; ">
+        @*<div><a class="btn" target="_blank" href="/CommunityTextDocument/ExportPDF?id=@(Model.Id)&appFlag=@(Model.AppFlag)&communityFlag=@(Model.CommunityFlag)"><span class="fa fa-file-pdf-o"></span></a></div>*@
+        <div><a class="btn" onclick="javascript:exportPdf()"><span class="fa fa-file-pdf-o"></span></a></div>
+        <div><a class="btn" href="javascript:;" ng-click="openHistory()"><i class="fa fa-history"></i></a></div>
+        <div><a class="btn" href="javascript:;" title="保存" ng-click="save()"><i class="fa fa-save"></i></a></div>
+        <div>
+            <a class="btn" href="javascript:;" ng-click="setIsEdit(!isEdit)">
+                <i class="fa fa-edit" ng-if="!isEdit" title="编辑"></i>
+                <i ng-if="isEdit" class="fa fa-eye" title="预览"></i>
+            </a>
+        </div>
+    </div>
+
+    <textarea id="editPanel" ng-model="current.content" style="width:100%;height:100%;" ng-show="isEdit" ng-keyup="recordCaretPos()" ng-mouseup="recordCaretPos()"></textarea>
+    <div style="width:100%;height:100%;" ng-show="!isEdit" id="showPanel" ng-dblclick="setIsEdit(true)">
+
+    </div>
+</section>
+
+@section detailView{
+}
+@section scripts{
+    <script src="/lib/SyntaxHighlighter/scripts/XRegExp.js" type="text/javascript"></script>
+    <script src="/lib/SyntaxHighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="/lib/SyntaxHighlighter/scripts/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="/lib/SyntaxHighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+    <script src="/lib/SyntaxHighlighter/scripts/shBrushCss.js" type="text/javascript"></script>
+    <script src="/lib/SyntaxHighlighter/scripts/shBrushJScript.js" type="text/javascript"></script>
+    <script src="/lib/jsPDF/dist/jspdf.min.js"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="/lib/ajaxfileupload.js"></script>
+    <script src="/lib/paste.js"></script>
+    <script type="text/javascript">
+        window.abc = {};
+        window.abc.openPage = parent.openPage;
+        window.abc.getContent = function () {
+            console.log('getContent');
+            return document.getElementById("initContent").value;
+        }
+        window.abc.showContent = function (md_content) {
+            //console.log(md_content);
+            $("#showPanel").html(marked(md_content, { breaks: true }));
+            $("table").addClass("table table-bordered");//让表格显示bootstrap的样式
+            var langs = ['html', 'js', 'xml', 'csharp'];
+            for (var i = 0; i < langs.length; i++) {
+                var lang = langs[i];
+                $(".lang-" + lang).addClass("brush:" + lang);
+            }
+            SyntaxHighlighter.config.tagName = "code";
+            SyntaxHighlighter.highlight({ toolbar: false });
+
+        }
+        window.abc.insertContent = function (content) {
+            $('textarea').insertText(content);
+        }
+
+        function exportPdf() {
+            //alert("abc");
+            //var doc = new jsPDF()
+            //doc.text('Hello world!', 10, 10)
+            //doc.save('cscoder-a4.pdf')
+
+
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            var canvas = pdf.canvas;
+            var width = 600;
+            //canvas.width=8.5*72;
+            document.body.style.width = width + "px";
+
+            html2canvas(document.getElementById("showPanel"), {
+                canvas: canvas,
+                onrendered: function (canvas) {
+                    pdf.save('下载.pdf')
+                }
+            });
+
+        }
+
+
+        $(function () {
+            textarea_onresize();
+            window.onresize = textarea_onresize;
+        })
+
+        function textarea_onresize() {
+            //var h = $('body').height() - 20;
+            var h = $(window).height() - 50;
+            $('textarea').css('height', h + 'px');
+        }
+
+    </script>
+
+    <script src="/js/app/ArticleSet/openmarkdown.js"></script>
+}
+
+@section head{
+}

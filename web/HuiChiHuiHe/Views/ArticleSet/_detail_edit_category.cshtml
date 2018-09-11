@@ -1,0 +1,109 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> {{currentEditCategory.name}} 详细</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="updateCategoryError!=''">
+        <p>
+            <b>更新失败：</b>{{updateCategoryError}}
+        </p>
+    </div>
+    <div class="form-group">
+        <label>上级类别</label>
+        <div>
+            <span ng-if="currentEditCategory.pId">{{currentEditCategory.parentName}}  </span>
+            <span ng-if="!currentEditCategory.pId">根  </span>
+            <a class="btn btn-link" ng-click="showChangeCategoryParentDialog('dialog_change_category_parent')">重新选择</a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>类别名称</label>
+        <input class="form-control" ng-model="currentEditCategory.name" type="text" />
+    </div>
+    <div class="form-group">
+        <label>标识</label>
+        <input class="form-control" ng-model="currentEditCategory.flag" type="text" />
+    </div>
+    <div class="form-group">
+        <label>排序权重</label>
+        <input class="form-control" ng-model="currentEditCategory.orderWeight" type="text" />
+    </div>
+    <div class="form-group">
+        <label>说明</label>
+        <input class="form-control" ng-model="currentEditCategory.detail" type="text" />
+    </div>
+    <div class="form-group">
+        <label>图片</label>
+        <div class="input-group input-group-sm">
+            <input class="form-control" ng-model="currentEditCategory.ico" type="text" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-info btn-flat" onclick="javascript:document.getElementById('fileCategory').click();">上传</button>
+                <input type="file" style="display:none"
+                       id="fileCategory" name='image' onchange="angular.element(this).scope().fileNameChangedForCategory(this, angular.element(this).scope().currentEditCategory,'ico')" />
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>默认列表查看方式</label>
+        <select class="form-control" ng-model="currentEditCategory.defaultListViewType" ng-options="listViewType.value as listViewType.name for listViewType in listViewTypeList"></select>&nbsp;
+    </div>
+    <div class="form-group">
+        <label>标签（使用逗号分隔）</label>
+        <input class="form-control" ng-model="currentEditCategory.tags" type="text" />
+    </div>
+    <div class="form-group">
+        <label>keywords</label>
+        <input class="form-control" ng-model="currentEditCategory.keywords" type="text" />
+    </div>
+    <div class="form-group">
+        <label>description</label>
+        <input class="form-control" ng-model="currentEditCategory.description" type="text" />
+    </div>
+</div>
+<div class="box-footer">
+    <button class="btn btn-primary" ng-click="updateCategory()">保存</button>
+</div>
+<div class="box-header box-header-me with-border">
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> 扩展列
+        <button type="button" class="btn btn-box-tool" ng-click="articleColumn.add(currentEditCategory);"><i class="fa fa-plus"></i></button>
+    </h3>
+    <!-- /.box-tools -->
+</div>
+<div class="box-body">
+    <div class="box-body table-responsive no-padding">
+        <table class="table colResizable">
+            <thead>
+                <tr>
+                    <th style="width:70px;text-align:center;">序号</th>
+                    <th style="width:100px;">类别</th>
+                    <th style="width:150px;">标题</th>
+                    <th style="width:80px;">排序</th>
+                    <th>说明</th>
+                    <th style="width:70px;text-align:center;">保存</th>
+                    <th style="width:70px;text-align:center;">删除</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="item in articleColumn.items">
+                <td style="text-align:center;">{{($index+1)}}</td>
+                <td>
+                    <select class="form-control" ng-model="item.columnType" ng-options="status.value as status.name for status in columnTypeList"></select>
+                </td>
+                <td><input class="form-control" ng-model="item.name" /></td>
+                <td><input class="form-control" ng-model="item.orderWeight" /></td>
+                <td><input class="form-control" ng-model="item.detail" /></td>
+                <td style="text-align:center;"><a href="javascript:;" ng-click="articleColumn.update(currentEditCategory,item)"><i class="fa fa-save"></i></a></td>
+                <td style="text-align:center;"><a href="javascript:;" data-fn-delete="articleColumn.setIsDelete(currentEditCategory,item)" delete-confirm="确定移除'{{item.name}}'?"><i class="fa fa-remove"></i></a></td>
+            </tr>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>

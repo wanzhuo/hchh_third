@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+<table class="table colResizable">
+    <thead>
+        <tr>
+            <th style="width: 30px;">
+                <input type="checkbox" ng-model="selectAll" />
+            </th>
+            <th style="width:70px;text-align:center;">序号</th>
+            <th style="width:150px;">类别</th>
+            <th style="width:350px;">标题</th>
+            <th style="width:70px;">推荐</th>
+            <th style="width:150px;">状态</th>
+            <th style="width:70px;text-align:center;">计划</th>
+            <th style="width:70px;text-align:center;">属性</th>
+            <th style="width:70px;text-align:center;">删除</th>
+        </tr>
+    </thead>
+    <tr>
+        <td style="text-align:center;">---</td>
+        <td style="text-align:center;">---</td>
+        <td style="text-align:center;">---</td>
+        <td><input type="text" class="form-control input-sm" ng-model="searchModel.title" ng-change="load()" /></td>
+        <td style="text-align:center;">---</td>
+        <td style="text-align:center;"><select class="form-control" ng-model="searchModel.status" ng-options="status.value as status.name for status in searchArticlStatusList"  ng-change="load()"></select></td>
+        <td style="text-align:center;">---</td>
+        <td style="text-align:center;">---</td>
+    </tr>
+    <tr ng-repeat="item in items">
+        <td><input type="checkbox" ng-checked="selectAll" ng-model="item.isSelected" /></td>
+        <td style="text-align:center;">{{pageSize*(pageIndex-1) + ($index+1)}}</td>
+        <td>{{item.categoryName}}</td>
+        <td><a href="javascript:;" ng-click="itemOpen(item)">{{item.title}}</a></td>
+        <td>{{item.isRecommend}}</td>
+        <td>{{item.status | articleStatus}}</td>
+        <td style="text-align:center;"><a href="javascript:;" ng-click="editScheduled(item)"><i class="fa fa-calendar-check-o"></i></a></td>
+        <td style="text-align:center;"><a href="javascript:;" ng-click="edit(item)"><i class="fa fa-wrench"></i></a></td>
+        <td style="text-align:center;"><a href="javascript:;" data-fn-delete="setIsDelete(item)" delete-confirm="确定移除'{{item.truename}}'?"><i class="fa fa-remove"></i></a></td>
+    </tr>
+</table>

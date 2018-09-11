@@ -1,0 +1,97 @@
+﻿.detailView.invisible {
+    transform: translate(100%, 0);
+    -moz-transform: translate(100%, 0);
+    -webkit-transform: translate(100%, 0);
+    -ms-transform: translate(100%, 0);
+    transition: transform 500ms;
+    -webkit-transition: -webkit-transform 500ms;
+}
+
+.detailView.visible {
+    transform: translate(0, 0);
+    -moz-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transition: transform 500ms;
+    -webkit-transition: -webkit-transform 500ms;
+}
+
+.detailView {
+    position: fixed;
+    right: 0;
+    left: 12%;
+    top: 0px;
+    bottom:0px;
+    border: 1px solid #d7d7d7;
+    background-color: #fff;
+    z-index: 1000;
+    transform: translate(100%, 0);
+    -moz-transform: translate(100%, 0);
+    -webkit-transform: translate(100%, 0);
+    -ms-transform: translate(100%, 0);
+}
+
+.box-header-me .box-close {
+    right: unset;
+    left: 5px;
+}
+
+#main-nav a {
+    background-color: #ecf0f5;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#main-nav .active a {
+    border-left: 1px solid #d2d6de;
+    border-right: 1px solid #d2d6de;
+}
+.main-footer {
+padding:5px;
+min-height:45px;
+}
+.main-footer .btn {
+    margin:0px 3px;
+}
+.treeview .fa-angle-left {
+    display:inline-block;
+}
+
+.treeview .fa-angle-down {
+    display:none;
+}
+
+.sidebar-menu li.active .fa-angle-left {
+    display:none;
+}
+
+.sidebar-menu li.active .fa-angle-down {
+    display:inline-block;
+}
+
+table.colResizable {
+    width:initial;
+}
+table.colResizable td,table.colResizable th {
+    white-space: nowrap;
+}
+
+table.JColResizer > tbody > tr > td, .JColResizer > tbody > tr > th {
+    overflow: hidden;
+    padding-left: 8px!important;
+    padding-right: 8px!important;
+}
+
+.validation-invalid { 
+    color:red;
+}
+.validation-valid {
+    color: #0074D9;
+}
+
+    .right{text-align: right;}
+    .direct-chat-text{display:inline-block;margin-left:10px;}
+    .right .direct-chat-text{margin-right:10px;}
+    .control-sidebar{z-index:1051;}
+    .main-header{z-index:1052;}
+    .brage-red{position:absolute;display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:2px;background-color:#f00;}

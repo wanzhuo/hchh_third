@@ -1,0 +1,11 @@
+{
+  "Url": "/shopbrandcommoditycategoryset/index",
+  "Sources": [
+    "/api/shopbrandcommoditycategorysetapi/gettree",
+    "/api/shopbrandcommoditycategorysetapi/getpagedlist",
+    "/api/shopbrandcommoditycategorysetapi/add",
+    "/api/shopbrandcommoditycategorysetapi/update",
+    "/api/shopbrandcommoditycategorysetapi/setisdelete",
+    "/api/shopbrandcommoditycategorysetapi/getshopbrands"
+  ]
+}

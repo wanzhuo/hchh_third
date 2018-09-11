@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Version>0.1.1.4241</Version>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.6\ZRui.Web.Core.Wechat.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZRui.Web.Core.Wechat.Open\ZRui.Web.Core.Wechat.Open.csproj" />
+    <ProjectReference Include="..\ZRui.Web.Shop.BLL\ZRui.Web.BLL.csproj" />
+  </ItemGroup>
+
+</Project>

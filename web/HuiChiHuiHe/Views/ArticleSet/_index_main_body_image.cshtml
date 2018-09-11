@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+<div class="pull-left imageitem" ng-repeat="item in items" ng-class="{'imageitemSelected':item.isSelected}">
+    <input type="checkbox" ng-checked="selectAll" ng-model="item.isSelected" style="display:none;" />
+    <div class="cover" ng-click="item.isSelected=!item.isSelected">
+        <span></span>
+    </div>
+    <div class="topinfo"><a href="javascript:;" ng-click="itemOpen(item)">{{item.title}}</a></div>
+    <img src="/images/empty.jpg" ng-show="item.ico==null || item.ico.length<=0" />
+    <img src="{{item.ico}}" ng-show="item.ico!=null && item.ico.length>0" />
+    <div class="row info">
+        <div class="col-md-6 rate">
+            <a href="javascript:;"  class="btn btn-link center-block" ng-click="edit(item)"><i class="fa fa-wrench"></i> 设置</a>
+        </div>
+        <span class="col-md-6 ">
+            <a href="javascript:;"  class="btn btn-link center-block" data-fn-delete="setIsDelete(item)" delete-confirm="确定移除'{{item.title}}'?"><i class="fa fa-remove"></i> 删除</a>
+        </span>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xml>
+  <AppId><![CDATA[wx0d9f22803e745596]]></AppId>
+  <CreateTime>1520999511</CreateTime>
+  <InfoType><![CDATA[component_verify_ticket]]></InfoType>
+  <ComponentVerifyTicket><![CDATA[ticket@@@tpCXlEhWe8vJoPkhWbYiSAkn16My9MN85rXF4n0vjg8IO5nbHmpc17F5kMyOqhGri5qVMIpUOLIv-gQGtB2IVQ]]></ComponentVerifyTicket>
+</xml>

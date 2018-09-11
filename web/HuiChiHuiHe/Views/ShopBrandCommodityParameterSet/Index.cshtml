@@ -1,0 +1,203 @@
+﻿@model ZRui.Web.CommunityArgsModel
+@{
+    ViewBag.Title = "商铺商品属性管理";
+    ViewBag.ngController = "shopBrandCommodityParameterSetIndexController";
+    Layout = "~/Views/Shared/_LayoutMember.cshtml";
+}
+<section ng-init="init('@Model.CommunityFlag','@Model.AppFlag')">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            商品属性管理
+            <small></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">商品属性</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">商铺品牌</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table colResizable">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;text-align:center;">序号</th>
+                                    <th style="width:350px;">标题</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align:center;">---</td>
+                                <td><input type="text" class="form-control input-sm" ng-model="shopBrandCommodityParameterSet.searchShopBrandsModel.name" ng-change="load()" /></td>
+                            </tr>
+                            <tr ng-repeat="item in shopBrandCommodityParameterSet.shopBrands">
+                                <td style="text-align:center;">{{item.id}}</td>
+                                <td><a href="javascript:;" ng-click="selectShopBrand(item)">{{item.name}}</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><span ng-if="shopBrandCommodityParameterSet.currentShopBrand!=null">{{shopBrandCommodityParameterSet.currentShopBrand.name}}</span>商品属性列表</h3>
+                        <a class="btn btn-link btn-sm" ng-click="initAdd()" ng-if="shopBrandCommodityParameterSet.currentShopBrand!=null"><i class="fa fa-plus"></i></a>
+                        <div class="box-tools pull-right">
+                            <input type="text" class="form-control pull-right" ng-change="shopBrandCommodityParameterSet.load()" placeholder="行数" ng-model="shopBrandCommodityParameterSet.pageSize" title="行数" style="width:45px;">
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table colResizable">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;text-align:center;">序号</th>
+                                    <th style="width:150px;">标识</th>
+                                    <th style="width:250px;">名称</th>
+
+                                    <th style="width:70px;text-align:center;">删除</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align:center;">---</td>
+                                <td style="text-align:center;">---</td>
+                                <td><input type="text" class="form-control input-sm" ng-model="shopBrandCommodityParameterSet.searchModel.name" ng-change="load()" /></td>
+
+                                <td style="text-align:center;">---</td>
+                            </tr>
+                            <tr ng-repeat="item in shopBrandCommodityParameterSet.items">
+                                <td style="text-align:center;">{{shopBrandCommodityParameterSet.pageSize*(shopBrandCommodityParameterSet.pageIndex-1) + ($index+1)}}</td>
+                                <td><a href="javascript:;" ng-click="edit(item)">{{item.flag}}</a></td>
+                                <td><a href="javascript:;" ng-click="edit(item)">{{item.name}}</a></td>
+
+                                <td style="text-align:center;"><a href="javascript:;" data-fn-delete="shopBrandCommodityParameterSet.setIsDelete(item)" delete-confirm="确定移除'{{item.name}}'?"><i class="fa fa-remove"></i></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <ul ng-show="shopBrandCommodityParameterSet.totalCount>shopBrandCommodityParameterSet.pageSize" uib-pagination total-items="shopBrandCommodityParameterSet.totalCount" items-per-page="pageSize" ng-model="shopBrandCommodityParameterSet.pageIndex" max-size="6" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="shopBrandCommodityParameterSet.load()"></ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box -->
+
+
+
+    </section>
+    <!-- /.content -->
+</section>
+@section detailView{
+    <div class="box box-success" ng-show="viewName=='add'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-plus" ng-dblclick="viewName = 'index'"></i> 添加</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="addError!=''">
+                <p>
+                    <b>添加失败：</b>{{addError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>所属商铺品牌</label>
+                <div class="form-control">{{shopBrandCommodityParameterSet.currentShopBrand.name}}</div>
+            </div>
+            <div class="form-group">
+                <label>名称</label>
+                <input class="form-control" ng-model="shopBrandCommodityParameterSet.newModel.name" type="text" />
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="shopBrandCommodityParameterSet.add()">确定添加</button>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+    <div class="box box-primary" ng-show="viewName=='edit'">
+        <div class="box-header box-header-me with-border">
+
+            <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> 商品属性：{{shopBrandCommodityParameterSet.current.name}} 详细</h3>
+
+            <div class="box-tools pull-left">
+                <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="callout callout-danger" ng-show="updateError!=''">
+                <p>
+                    <b>更新失败：</b>{{updateError}}
+                </p>
+            </div>
+            <div class="form-group">
+                <label>标识</label>
+                <div class="form-control">{{shopBrandCommodityParameterSet.current.flag}}</div>
+            </div>
+            <div class="form-group">
+                <label>名称</label>
+                <input class="form-control" ng-model="shopBrandCommodityParameterSet.current.name" type="text" />
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-primary" ng-click="shopBrandCommodityParameterSet.update()">保存</button>
+        </div>
+
+        <div class="box-header box-header-me with-border">
+            <h3 class="box-title">
+                <i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> 值列表
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+
+        <div class="box-body">
+            <div class="box-body table-responsive no-padding">
+                <table class="table colResizable">
+                    <thead>
+                        <tr>
+                            <th style="width:70px;text-align:center;">序号</th>
+                            <th style="width:150px;">值</th>
+                            <th style="width:70px;text-align:center;">操作 </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align:center;">--</td>
+                        <td><input class="form-control" ng-model="shopBrandCommodityParameterValueSet.newModel.value" /></td>
+                        <td style="text-align:center;"><a href="javascript:;" ng-click="shopBrandCommodityParameterValueSet.add()">添加</a></td>
+                    </tr>
+                    <tr ng-repeat="item in shopBrandCommodityParameterSet.current.values">
+                        <td style="text-align:center;">{{($index+1)}}</td>
+                        <td>{{item.value}}</td>
+                        <td style="text-align:center;"><a href="javascript:;" data-fn-delete="shopBrandCommodityParameterValueSet.setIsDelete(item)" delete-confirm="确定移除?"><i class="fa fa-remove"></i></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+}
+@section scripts{
+    <script src="~/js/app/shopBrandCommodityParameterSet/index.js"></script>
+}
+
+@section head{
+
+}

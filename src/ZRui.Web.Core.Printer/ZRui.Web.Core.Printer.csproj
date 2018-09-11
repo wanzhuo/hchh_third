@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>ZRui.Web</RootNamespace>
+    <Version>2.0.2.63</Version>
+    <Authors>Xiang</Authors>
+    <Company>Xiang</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ZRui.Web.Base" Version="1.0.6" />
+  </ItemGroup>
+
+</Project>

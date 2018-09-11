@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZRui.Web.Core.Printer", "src\ZRui.Web.Core.Printer\ZRui.Web.Core.Printer.csproj", "{644D5844-F2EA-415E-A4EB-494C5316C567}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZRui.Web.Core.Printer.Web", "src\ZRui.Web.Core.Printer.Web\ZRui.Web.Core.Printer.Web.csproj", "{4050A718-CD12-4C0C-AA1F-481BFC4D1648}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZRui.Web.Core.Printer.MySql", "src\ZRui.Web.Core.Printer.MySql\ZRui.Web.Core.Printer.MySql.csproj", "{786CA932-0ABB-4F8D-A13F-A996B6A27BDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZRui.Web.Core.Printer.Test", "src\ZRui.Web.Core.Printer.Test\ZRui.Web.Core.Printer.Test.csproj", "{A08D5313-F41D-49E5-91C8-FDD3BDC26C10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{644D5844-F2EA-415E-A4EB-494C5316C567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644D5844-F2EA-415E-A4EB-494C5316C567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644D5844-F2EA-415E-A4EB-494C5316C567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644D5844-F2EA-415E-A4EB-494C5316C567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4050A718-CD12-4C0C-AA1F-481BFC4D1648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4050A718-CD12-4C0C-AA1F-481BFC4D1648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4050A718-CD12-4C0C-AA1F-481BFC4D1648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4050A718-CD12-4C0C-AA1F-481BFC4D1648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786CA932-0ABB-4F8D-A13F-A996B6A27BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786CA932-0ABB-4F8D-A13F-A996B6A27BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786CA932-0ABB-4F8D-A13F-A996B6A27BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786CA932-0ABB-4F8D-A13F-A996B6A27BDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08D5313-F41D-49E5-91C8-FDD3BDC26C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08D5313-F41D-49E5-91C8-FDD3BDC26C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08D5313-F41D-49E5-91C8-FDD3BDC26C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08D5313-F41D-49E5-91C8-FDD3BDC26C10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F104D4CE-3A4F-4580-B8AB-E0628A2B8196}
+	EndGlobalSection
+EndGlobal

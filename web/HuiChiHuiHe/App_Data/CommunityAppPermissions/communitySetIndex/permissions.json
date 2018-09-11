@@ -1,0 +1,22 @@
+{
+  "Url": "/communityset/index",
+  "Sources": [
+    "/api/CommunitySetAPI/GetList",
+    "/api/CommunitySetAPI/GetPagedList",
+    "/api/CommunitySetAPI/GetSingle",
+    "/api/CommunitySetAPI/GetMembers",
+    "/api/CommunitySetAPI/Add",
+    "/api/CommunitySetAPI/AddMember",
+    "/api/CommunitySetAPI/AddManager",
+    "/api/CommunitySetAPI/RemoveMember",
+    "/api/CommunitySetAPI/RemoveManager",
+    "/api/CommunitySetAPI/SetCommunityName",
+    "/api/CommunitySetAPI/AddApp",
+    "/api/CommunitySetAPI/RemoveApp",
+    "/api/CommunitySetAPI/SetAppName",
+    "/api/CommunitySetAPI/SetAppIsDisabled",
+    "/api/CommunitySetAPI/SetAppIsDefaultOpen",
+    "/api/CommunitySetAPI/GetAppSettings",
+    "/api/CommunitySetAPI/SetAppSettings"
+  ]
+}

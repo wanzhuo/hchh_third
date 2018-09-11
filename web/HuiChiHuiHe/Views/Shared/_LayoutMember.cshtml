@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HuhuanHule 2 | Blank Page</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/lib/ionicons/css/ionicons.min.css">
+    <link href="/lib/select2/dist/css/select2.css" rel="stylesheet" />
+    <link href="/lib/angular-ui-select/dist/select.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/lib/AdminLTE/dist/css/AdminLTE.min.css">
+    <link href="/lib/dragula/dist/dragula.css" rel="stylesheet" />
+    <link href="/lib/artDialog/css/ui-dialog.css" rel="stylesheet" />
+    <link href="/lib/ngDialog/css/ngDialog.min.css" rel="stylesheet" />
+    <link href="/lib/ngDialog/css/ngDialog-theme-default.min.css" rel="stylesheet" />
+    <link href="/lib/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet">
+    <link href="/lib/angular-hotkeys/hotkeys.css" rel="stylesheet" />
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/lib/AdminLTE/dist/css/skins/_all-skins.min.css">
+    <link href="/css/siteMember.css?v=1.2" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/lib/html5shiv/dist/html5shiv.min.js"></script>
+    <script src="/lib/respond/dest/respond.min.js"></script>
+    <![endif]-->
+    <link href="~/lib/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/calendarDemo.css?1" rel="stylesheet" />
+    <link rel="stylesheet"; href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+    @RenderSection("head", required: false)
+
+
+</head>
+<body class="hold-transition" ng-app="app" style="background-color: #ecf0f5;" ng-controller="@ViewBag.ngController" ng-cloak>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        @RenderBody()
+        <div class="detailView" ng-class="{'visible':viewName != 'index','invisible':viewName =='index'}">
+            <div id="detailViewScroll">
+                @RenderSection("detailView", required: false)
+            </div>
+        </div>
+    </div>
+    <!-- ./wrapper -->
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/lib/colresizable/colResizable-1.6.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/lib/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/lib/AdminLTE/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/lib/AdminLTE/dist/js/app.min.js"></script>
+    <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/select2/dist/js/select2.js"></script>
+    <script src="/lib/angular-ui-select/dist/select.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/lib/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="/lib/dragula/dist/dragula.js"></script>
+    <script src="/lib/angular-dragula/dist/angular-dragula.min.js"></script>
+    <script src="/lib/artDialog/dist/dialog-plus-min.js"></script>
+    <script src="/lib/angular-validation/dist/angular-validation.min.js"></script>
+    <script src="/lib/angular-validation/dist/angular-validation-rule.min.js"></script>
+    <script src="/lib/mousetrap.min.js"></script>
+    <script src="/lib/angular-hotkeys/hotkeys-native.js"></script>
+    <script src="/lib/ngDialog/js/ngDialog.min.js"></script>
+    <script src="/lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="/lib/paste.js"></script>
+    <script src="/lib/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js"></script>
+    <script src="/lib/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="/lib/ng-file-upload/ng-file-upload-all.min.js"></script>
+    <script>
+        var abc = {};
+        abc.showNotify = function (title, content, type, isNotify) {
+            //abc.showNotify(title, content, type, isNotify);
+        }
+        abc.openPage = parent.openPage;
+
+        $(function () {
+            $(".table").addClass("table-bordered table-striped");
+            $(".colResizable").colResizable({
+                liveDrag: true,
+                resizeMode: 'flex'
+            });
+
+            window.onresize = resize;
+            resize();
+        });
+
+        function resize() {
+            var height = $(window).height();
+            if ($.AdminLTE.options.sidebarSlimScroll) {
+                if (typeof $.fn.slimScroll != 'undefined') {
+                    //console.log("xxx");
+                    //Destroy if it exists
+                    $("#detailViewScroll").slimScroll({ destroy: true }).height("auto");
+                    //Add slimscroll
+                    $("#detailViewScroll").slimscroll({
+                        height: height,
+                        color: "rgba(0,0,0,0.2)",
+                        size: "10px",
+                    });
+                }
+            }
+        }
+    </script>
+    <script src="/js/app/app.js?v1.1"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

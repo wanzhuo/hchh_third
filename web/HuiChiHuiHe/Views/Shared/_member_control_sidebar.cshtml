@@ -1,0 +1,105 @@
+﻿@{
+    Layout = null;
+}
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab">已接入</a></li>
+
+        <li><a href="#control-sidebar-settings-tab" data-toggle="tab">待接入</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Home tab content -->
+        <div class="tab-pane active" id="control-sidebar-home-tab">
+            <ul class="control-sidebar-menu">
+                <li ng-repeat="item in chatOpenIds" ng-click="startChat(item,false)">
+                    <a href="javascript:void(0)">
+                      <div class="pull-left">
+                        <img src="{{avator[item]}}" class="img-circle" width="40" height="40">
+                      </div>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">求职者</h4>
+                            <p>{{item}}</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.control-sidebar-menu -->
+        </div>
+        <!-- /.tab-pane -->
+        <!-- Stats tab content -->
+        <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+        <!-- /.tab-pane -->
+        <!-- Settings tab content -->
+        <div class="tab-pane" id="control-sidebar-settings-tab">
+            <ul class="control-sidebar-menu">
+
+                <li ng-repeat="item in chatOpenIdsForNobody" ng-click="startChat(item,true)">
+                    <a href="javascript:void(0)">
+                      <div class="pull-left">
+                        <img src="{{avator[item]}}" class="img-circle" width="40" height="40">
+                      </div>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">求职者</h4>
+                            <p>{{item}}</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+
+<!-- Modal -->
+<div class="modal fade" id="glabelChat" tabindex="-1" style="top:50px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+              <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">会话（{{curConnentUser}}） <span class="btn btn-xs btn-warning" ng-click="disConnectChat()">取消接入</span></h4>
+      </div>
+      <div class="modal-body">
+        <div class="box box-primary direct-chat direct-chat-primary">
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <!-- Conversations are loaded here -->
+              <div class="direct-chat-messages" id="direct-chat-messages">
+                <div id="direct-chat-msg">
+                <!-- Message. Default to the left -->
+                <div class="direct-chat-msg" ng-repeat="item in chatMessages" ng-class="{true: 'right'}[item.fromUser=='我']">
+                  <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name" ng-class="{'pull-right':item.fromUser=='我','pull-left':item.fromUser=='客户'}"></span>
+                    <span class="direct-chat-timestamp">{{item.time | date:"yyyy-MM-dd HH:mm:ss"}}</span>
+                  </div>
+                  <!-- /.direct-chat-info -->
+                  <img class="direct-chat-img" ng-src="{{curConnentUserImage}}" ng-if="item.fromUser=='客户'"><!-- /.direct-chat-img -->
+                  <img class="direct-chat-img" src="../dist/static/img/xcicon.png" ng-if="item.fromUser=='我'"><!-- /.direct-chat-img -->
+                  <div class="direct-chat-text">
+                    {{item.content}}
+                  </div>
+                  <!-- /.direct-chat-text -->
+                </div>
+                <!-- /.direct-chat-msg -->
+                <div id="mesLoction"></div>
+                </div>
+              </div>
+              <!--/.direct-chat-messages-->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <div class="input-group">
+                  <input type="text" name="message" placeholder="输入...(Enter发送)" ng-keyup="myKeyup($event)" ng-model="sendTextContent" class="form-control">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-flat" ng-click="sendText()">发送(Enter)</button>
+                      </span>
+                </div>
+            </div>
+            <!-- /.box-footer-->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

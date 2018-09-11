@@ -1,0 +1,103 @@
+﻿@model string
+@{
+    
+}
+  <header data-am-widget="header" class="am-header border-bottom">
+      <h1 class="am-header-title">绑定手机号</h1>
+  </header>
+<form class="am-form am-margin-top" method="post" id="form1">
+  <div class="am-padding">
+    <div class="am-g">
+      <div class="am-u-sm-12 am-padding-left-0 am-padding-right-0">
+        <input type="text" class="input-graybg input-label" name="" id="phone" datatype="mReg" value="" autocomplete="off">
+        <span class="input-label-txt">手机号</span>
+      </div>
+    </div>
+    <div class="am-g mt10">
+        <div class="am-u-sm-12 am-padding-left-0 am-padding-right-0">
+        <input type="text" class="input-graybg input-label" name="" datatype="*" nullmsg="请输入手机验证码">
+        <span class="input-label-txt">验证码</span>
+        <a class="checkCode am-disabled" href="javascript:;">获取验证码</a>
+        </div>
+    </div>
+      <div class="am-margin-top am-text-xs gray">请完成绑定手机号操作，下次进入会利用微信授权自动登录。</div>
+  </div>
+    <div class="am-padding am-padding-top-0 am-margin-left am-margin-right mt10">
+        <button type="submit" class="am-btn am-btn-block am-btn-danger am-btn-lg am-round">注册并绑定</button>
+    </div>
+</form>
+
+@section scripts{
+<script>
+$(function(){
+  //表单验证
+  $("#form1").Validform({
+      tiptype: 4,
+      url: "/api/WechatAPI/BindCustomerPhone",
+      contentType: "application/json; charset=utf-8",
+      ajaxPost:true,
+      datatype: {
+          "mReg": function (gets, obj, curform, regxp) {
+              var reg = /^1[0-9]{10}$/;
+              var _btn = $(".checkCode");
+              if (!obj.attr("readonly")) {//在可输入状态下
+                  if (!reg.test(gets)) {
+                      _btn.addClass("am-disabled").off("click"); //禁用获取验证按钮
+                      return false;
+                  }
+                  else {
+                      //验证手机号是否已用
+                      var isUsed = true;
+                      $.ajax({
+                          type: "POST",
+                          url: "/api/WechatAPI/SendSmsForBindCustomerPhone",
+                          data: { phone: obj.val() },
+                          contentType: "application/json; charset=utf-8",
+                          dataType: "json",
+                          data:JSON.stringify({phone:obj.val(),openId:"test"}),
+                          async: false,
+                          success: function (obj) {
+                              if (obj.success) {
+                                  //帐户不存在时
+                                  isUsed = true;
+                                  message = "";
+                              }
+                              else {
+                                  isUsed = false;
+                                  message = obj.message;
+                              }
+                          }
+                      });
+                  }
+
+                  if (!isUsed) {//判断是否已使用
+                      _btn.addClass("am-disabled").off("click"); //禁用获取验证按钮
+                      return message;
+                  }
+                  else {//帐户存在
+                      _btn.removeClass("am-disabled").off("click");
+                      _btn.on("click", function () { sendMessage("/api/WechatAPI/SendSmsForBindCustomerPhone", 60, _btn, obj); });//激活获取验证按钮
+                      return true;
+                  }
+              }
+          }
+      },
+      ajaxpost:{
+        success:function(data,obj){
+          if(data.success){
+            $.alerttips("注册并绑定成功!","right");
+            setTimeout(function(){
+                window.location.href="#";//绑定的就不需要跟到登录页面
+            },2000)
+          }else{
+            $.alerttips(data.message,"info");
+          }
+        },
+        error:function(){
+          alert("网络繁忙，请稍候再试！");
+        }
+      }
+    });
+})
+  </script>
+}

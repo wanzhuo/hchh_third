@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+<div class="box-header box-header-me with-border">
+
+    <h3 class="box-title"><i class="fa fa-edit" ng-dblclick="viewName = 'index'"></i> {{current.title}} 计划任务</h3>
+
+    <div class="box-tools pull-left">
+        <button type="button" class="btn btn-box-tool" ng-click="viewName = 'index'"><i class="fa fa-times"></i></button>
+    </div>
+    <!-- /.box-tools -->
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <div class="callout callout-danger" ng-show="updateError!=''">
+        <p>
+            <b>更新失败：</b>{{updateError}}
+        </p>
+    </div>
+    <h3>
+        <button type="button" class="btn btn-box-tool" ng-click="articleScheduledTask.add(current);"><i class="fa fa-plus"></i> 添加</button>
+    </h3>
+    <table class="table colResizable">
+        <thead>
+            <tr>
+                <th style="width:70px;text-align:center;">序号</th>
+                <th style="width:150px;">动作</th>
+                <th style="width:150px;">触发时间</th>
+                <th>参数</th>
+                <th style="width:70px;text-align:center;">保存</th>
+                <th style="width:70px;text-align:center;">删除</th>
+            </tr>
+        </thead>
+        <tr ng-repeat="item in articleScheduledTask.items">
+            <td style="text-align:center;">{{($index+1)}}</td>
+            <td>
+                <select class="form-control" ng-model="item.actionName" ng-options="actionName for actionName in ['无动作','状态变更']"></select>
+            </td>
+            <td><input class="form-control" ng-model="item.actionTime" datetime-picker /></td>
+            <td>
+                <select class="form-control" ng-model="item.actionArgsModel.TargetStatus" ng-options="status.value as status.name for status in articleStatusList"></select>
+                <input class="form-control" ng-model="item.actionArgs" style="display:none" />
+            </td>
+            <td style="text-align:center;"><a href="javascript:;" ng-click="articleScheduledTask.update(current,item)"><i class="fa fa-save"></i></a></td>
+            <td style="text-align:center;"><a href="javascript:;" data-fn-delete="articleScheduledTask.setIsDelete(current,item)" delete-confirm="确定移除?"><i class="fa fa-remove"></i></a></td>
+        </tr>
+    </table>
+</div>

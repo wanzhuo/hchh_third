@@ -1,0 +1,45 @@
+﻿@model List<ShopOrder>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>最新订单</title>
+    <style>
+        .myTable{
+            width: 100%;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <table class="myTable">
+        <thead>
+            <tr>
+                <th>
+                    订单号
+                </th>
+                <th>
+                    支付时间
+                </th>
+                <th>
+                    实付
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ShopOrder item in Model)
+            {
+                <tr>
+                    <td>@item.OrderNumber</td>
+                    <td>@item.PayTime</td>
+                    <td>@(item.Payment/100d)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

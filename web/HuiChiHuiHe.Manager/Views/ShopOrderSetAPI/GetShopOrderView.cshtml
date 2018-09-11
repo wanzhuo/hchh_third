@@ -1,0 +1,151 @@
+﻿@model ZRui.Web.ShopManager.ShopOrderSetAPIModels.GetShopOrderViewResultModel
+@{
+    Layout = null;
+    int itemsCount = 0;
+    int i = 1;
+    if (!Model.PayTime.HasValue)
+    {
+        Model.PayTime = DateTime.Now;
+
+    }
+    if (string.IsNullOrEmpty(Model.Headimgurl))
+    {
+        Model.Headimgurl = "/js/app/shopOrderSetAPI/1.jpeg";
+    }
+    if (string.IsNullOrEmpty(Model.NickName))
+    {
+        Model.NickName = "会员" + Model.MemberId;
+    }
+}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/flexible.css">
+    <script src="/js/app/shopOrderSetAPI/flexible.js"></script>
+    <link rel="stylesheet" href="/js/app/shopOrderSetAPI/style.css">
+</head>
+<body>
+    <div class="warp">
+        <div class="banner"></div>
+        <div class="bill">
+            <div class="order-info">
+                <div class="user-logo">
+                    <img src="@Model.Headimgurl" alt="">
+                </div>
+                <div class="user-name">@Model.NickName</div>
+                <div class="order-desk order-type">
+                    @if (Model.ShopPartName != null)
+                    {
+                        <span>桌台：@Model.ShopPartName</span>
+                    }
+                    else if (Model.ShopOrderSelfHelp != null)
+                    {
+                        <span>自助点餐</span>
+                    }
+                    else
+                    {
+                        <span>外卖单</span>
+                    }
+                    <!-- <span>餐饮人数：</span> -->
+                </div>
+                @if (Model.ShopOrderSelfHelp != null)
+                {
+                    <div class="order-num order-type">取餐号码: @Model.ShopOrderSelfHelp.Number</div>
+                }
+                <div class="order-num order-type">订单编号: @Model.OrderNumber</div>
+                <div class="order-time order-type">
+                    支付时间：
+                    <span>@Model.PayTime.Value.ToString("yyyy-MM-dd")</span>
+                    <span>@Model.PayTime.Value.ToString("HH:mm:ss")</span>
+                </div>
+                @if (!Model.PickupTime.Equals(new DateTime()))
+                {
+                    <div class="order-time order-type">
+                        @if (Model.TakeWay.Equals(TakeWay.送货上门.ToString()))
+                        {
+                            @:期望配送时间
+                        }
+                        else
+                        {
+                            @:预计自提时间
+                        }
+                        ：
+                        <span>@Model.PickupTime.ToString("yyyy-MM-dd")</span>
+                        <span>@Model.PickupTime.ToString("HH:mm:ss")</span>
+                    </div>
+                }
+
+            </div>
+            <div class="bill-table">
+                <ul class="bill-table-header">
+                    <li>品名</li>
+                    <li>数量</li>
+                    <li>单价</li>
+                    <li>小计</li>
+                </ul>
+                @foreach (var item in Model.ShopOrderItems)
+                {
+                    itemsCount += item.Count;
+                    <div class="bill-table-content">
+                        <p>@(i++).@item.Name (@item.SkuSummary)</p>
+                        <ul class="list">
+                            <li></li>
+                            <li>@item.Count</li>
+                            <li>@item.Price</li>
+                            <li>@item.Amount</li>
+                        </ul>
+                    </div>
+                }
+                <ul class="bill-table-bottom">
+                    <li>合计</li>
+                    <li>@itemsCount</li>
+                    <li></li>
+                    <li>@Model.OrderAmount</li>
+                </ul>
+                <ul class="discount">
+                    @if (Model.ShopOrderMoneyOffRule != null)
+                    {
+                        <li>满 @Math.Round(Model.ShopOrderMoneyOffRule.FullAmount / 100d, 2) 减 @Math.Round(Model.ShopOrderMoneyOffRule.Discount / 100d, 2)</li>
+                    }
+                    @if (Model.ShopOrderOtherFee != null)
+                    {
+                        if (Model.ShopOrderOtherFee.BoxFee > 0)
+                        {
+                            <li>餐盒费：@Math.Round(Model.ShopOrderOtherFee.BoxFee / 100d, 2)</li>
+                        }
+                        if (Model.ShopOrderOtherFee.DeliveryFee > 0 && Model.TakeWay.Equals(TakeWay.送货上门.ToString()))
+                        {
+                            <li>配送费：@Math.Round(Model.ShopOrderOtherFee.DeliveryFee / 100d, 2)</li>
+                        }
+                    }
+                    <li>支付方式： @Model.PayWay</li>
+                    <!-- <li>银联卡：1</li> -->
+                </ul>
+                <div class="pay">合计实付：<span>@Model.PayAmount</span></div>
+                @if (Model.Name != null)
+                {
+                    <div>客户：@Model.Name</div>
+                }
+                @if (Model.Phone != null)
+                {
+                    <div>电话：@Model.Phone</div>
+                }
+                @if (Model.TakeWay != null)
+                {
+                    <div>下单方式：@Model.TakeWay</div>
+                }
+                @if (Model.Address != null)
+                {
+                    <div>地址：@Model.Address</div>
+                }
+                @if (Model.Remark != null)
+                {
+                    <div>备注：@Model.Remark</div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

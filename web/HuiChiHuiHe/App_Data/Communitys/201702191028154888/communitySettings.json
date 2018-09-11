@@ -1,0 +1,166 @@
+﻿{
+  "Creator": "",
+  "CreateTime": "2017-02-19T10:28:15.7780992+08:00",
+  "CreateIp": "",
+  "Members": [
+    {
+      "Username": "member1",
+      "Nickname": "member1",
+      "AddTime": "2017-02-19T10:28:23.6769144+08:00"
+    },
+    {
+      "Username": "member15",
+      "Nickname": "member15",
+      "AddTime": "2018-03-15T09:50:24.0713318+08:00"
+    }
+  ],
+  "Apps": [
+    {
+      "Flag": "01ulw7qv",
+      "Name": "商铺品牌",
+      "Price": 0.0,
+      "Url": "/shopBrandSet/index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": true
+    },
+    {
+      "Flag": "0v8gp4op",
+      "Name": "商铺",
+      "Price": 0.0,
+      "Url": "/shopSet/index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "tzxzoq6m",
+      "Name": "商品管理",
+      "Price": 0.0,
+      "Url": "/ShopBrandCommoditySet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "y3goaasq",
+      "Name": "商品规格管理",
+      "Price": 0.0,
+      "Url": "/ShopBrandCommodityParameterSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "f8j65vtp",
+      "Name": "商品库存管理",
+      "Price": 0.0,
+      "Url": "/shopCommodityStockSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "6jdlild5",
+      "Name": "商品类别管理",
+      "Price": 0.0,
+      "Url": "/ShopBrandCommodityCategorySet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "7givuq2l",
+      "Name": "商铺叫号设置",
+      "Price": 0.0,
+      "Url": "/ShopCallingQueueProductSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "5qhe3lqg",
+      "Name": "商铺叫号管理",
+      "Price": 0.0,
+      "Url": "/ShopCallingQueueSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "jcyae7u4",
+      "Name": "商圈管理",
+      "Price": 0.0,
+      "Url": "/CommercialDistrictSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "plg10st3",
+      "Name": "商铺预定管理",
+      "Price": 0.0,
+      "Url": "/ShopBookingSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "mbcf751p",
+      "Name": "商铺订单管理",
+      "Price": 0.0,
+      "Url": "/ShopOrderSet/Index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+    {
+      "Flag": "twso0gjp",
+      "Name": "文章管理",
+      "Price": 0.0,
+      "Url": "/articleSet/index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": false
+    },
+   {
+      "Flag": "01ulw7bb",
+      "Name": "商铺交易报表",
+      "Price": 0.0,
+      "Url": "/shopReport/index",
+      "AppSettings": {
+        "Settings": []
+      },
+      "IsDisabled": false,
+      "IsDefaultOpen": true
+    }
+  ],
+  "Managers": [],
+  "IsDel": false,
+  "Flag": "201702191028154888",
+  "Name": "内容管理"
+}
